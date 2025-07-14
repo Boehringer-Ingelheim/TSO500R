@@ -25,6 +25,7 @@ tmb <- function(tmb_file_path){
 #' @importFrom dplyr mutate relocate select
 #' @importFrom stringr str_replace
 #' @importFrom tibble tibble
+#' @importFrom rlang .data
 read_tmb_trace_data <- function(tmb_directory) {
   tmb_files <- list.files(
     path = tmb_directory,
@@ -34,9 +35,9 @@ read_tmb_trace_data <- function(tmb_directory) {
   )
 
   tmb_data = tibble(file = tmb_files) |>
-    mutate(data = lapply(file, read_tsv)) |>
+    mutate(data = lapply(.data$file, read_tsv)) |>
     unnest(data) |>
-    mutate(sample_id = str_replace(basename(file), "_TMB_Trace.tsv|.tmb.trace.tsv", "")) |>
+    mutate(sample_id = str_replace(basename(.data$file), "_TMB_Trace.tsv|.tmb.trace.tsv", "")) |>
     select(-file) |>
     relocate(sample_id)
 
@@ -57,6 +58,7 @@ read_tmb_trace_data <- function(tmb_directory) {
 #' @importFrom dplyr mutate relocate select
 #' @importFrom stringr str_replace
 #' @importFrom tibble tibble
+#' @importFrom rlang .data
 read_tmb_details_data <- function(tmb_directory) {
   tmb_files <- list.files(
     path = tmb_directory,
@@ -68,7 +70,7 @@ read_tmb_details_data <- function(tmb_directory) {
     mutate(data = lapply(tmb_files, read_json)) |>
     unnest_wider(data) |>
     unnest_wider(Settings) |>
-    mutate(sample_id = str_replace(basename(file), ".tmb.json", "")) |>
+    mutate(sample_id = str_replace(basename(.data$file), ".tmb.json", "")) |>
     select(-file) |>
     relocate(sample_id)
 
@@ -87,6 +89,8 @@ read_tmb_details_data <- function(tmb_directory) {
 #' @importFrom dplyr mutate select relocate
 #' @importFrom tidyr unnest_longer unnest pivot_wider
 #' @importFrom tibble tibble
+#' @importFrom stringr str_replace
+#' @importFrom rlang .data
 read_tmb_details_data_csv <- function(tmb_directory) {
   tmb_files <- list.files(
     path = tmb_directory,
@@ -100,7 +104,7 @@ read_tmb_details_data_csv <- function(tmb_directory) {
     unnest(data) |>
     select(-c(V1, V2)) |>
     pivot_wider(names_from = V3, values_from = V4) |>
-    mutate(sample_id = str_replace(basename(file), ".tmb.metrics.csv", "")) |>
+    mutate(sample_id = str_replace(basename(.data$file), ".tmb.metrics.csv", "")) |>
     select(-file) |>
     relocate(sample_id)
 

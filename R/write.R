@@ -98,6 +98,7 @@ write_multiqc_data <- function(analysis_details_frame, sequencing_run_details_fr
 #' @importFrom tibble add_column
 #' @importFrom readr format_csv
 #' @importFrom stringr str_sub str_interp str_replace_all
+#' @importFrom rlang .data
 generate_dragen_samplesheet <- function(samplesheet, file_format_version = "2", run_name = "RunName", instrument_type =
                                           "NovaSeq", software_version = "3.10.9", adapter_read1, adapter_read2,
                                         adapter_behavior = "trim", patient_column = "Pat_ID",
@@ -139,7 +140,7 @@ ${tso500_data}"
 
   # transform bclconvert data
   bclconvert_data <- samplesheet_data$data |>
-    mutate(Sample_ID = paste(Sample_ID, Index_ID, sep = "_")) |>
+    mutate(Sample_ID = paste(.data$Sample_ID, .data$Index_ID, sep = "_")) |>
     select(c(Sample_ID, index, index2)) |>
     add_column(
       col_name1 = "",
@@ -153,8 +154,8 @@ ${tso500_data}"
   # transform tso500 data
   tso500_data <- samplesheet_data$data |>
     select(c(Sample_ID, Index_ID, Sample_Plate, Sample_Well, Sample_Type, patient_column)) |>
-    mutate(Sample_ID = paste(Sample_ID, Index_ID, sep = "_")) |>
-    mutate(Pair_ID = Sample_ID) |>
+    mutate(Sample_ID = paste(.data$Sample_ID, .data$Index_ID, sep = "_")) |>
+    mutate(Pair_ID = .data$Sample_ID) |>
     add_column(Sample_Feature = "") |>
     add_column(Sample_Description = "") |>
     mutate_all(~ replace(., is.na(.), "")) |>

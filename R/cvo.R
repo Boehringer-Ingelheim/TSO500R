@@ -154,6 +154,7 @@ get_fusions <- function(cvo_obj, ...) {
 #'
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_small_variants.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
     if (all(is.na(cvo_obj$small_variants))) {
@@ -164,7 +165,7 @@ get_small_variants.combined.variant.output <- function(cvo_obj) {
           cvo_obj$analysis_details$dna_sample_id,
           cvo_obj$analysis_details$pair_id
         )) |>
-        select(sample_id, everything())
+        select(.data$sample_id, everything())
     }
   )
   return(small_variant_df)
@@ -180,6 +181,7 @@ get_small_variants.combined.variant.output <- function(cvo_obj) {
 #'
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
     if (all(is.na(cvo_obj$gene_amplifications)) && all(is.na(cvo_obj$copy_number_variants))) {
@@ -196,7 +198,7 @@ get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
           cvo_obj$analysis_details$dna_sample_id,
           cvo_obj$analysis_details$pair_id
         )) |>
-        select(sample_id, everything())
+        select(.data$sample_id, everything())
     }
   )
   return(gene_amplification_df)
@@ -212,6 +214,7 @@ get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
 #'
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_splice_variants.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
     if (all(is.na(cvo_obj$splice_variants))) {
@@ -222,7 +225,7 @@ get_splice_variants.combined.variant.output <- function(cvo_obj) {
           cvo_obj$analysis_details$dna_sample_id,
           cvo_obj$analysis_details$pair_id
         )) |>
-        select(sample_id, everything())
+        select(.data$sample_id, everything())
     }
   )
   return(splice_variant_df)
@@ -238,6 +241,7 @@ get_splice_variants.combined.variant.output <- function(cvo_obj) {
 #'
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_fusions.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
     if (all(is.na(cvo_obj$fusions)) && all(is.na(cvo_obj$dna_fusions))) {
@@ -254,7 +258,7 @@ get_fusions.combined.variant.output <- function(cvo_obj) {
           cvo_obj$analysis_details$dna_sample_id,
           cvo_obj$analysis_details$pair_id
         )) |>
-        select(sample_id, everything())
+        select(.data$sample_id, everything())
     }
   )
   return(fusion_df)

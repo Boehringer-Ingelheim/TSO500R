@@ -345,9 +345,10 @@ process_and_filter_small_variant_data <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 filter_consequences <- function(variant_df, consequences, type_column = "consequence_s") {
   filtered_df <- variant_df |>
-    filter(!(get(type_column) %in% consequences | is.na(get(type_column)) | get(type_column) == ""))
+    filter(!((.data[[type_column]] %in% consequences) | is.na(.data[[type_column]]) | .data[[type_column]] == ""))
   return(filtered_df)
 }
 
@@ -362,9 +363,10 @@ filter_consequences <- function(variant_df, consequences, type_column = "consequ
 #'
 #' @export
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 keep_consequences <- function(variant_df, consequences, type_column = "consequence_s") {
   filtered_df <- variant_df |>
-    filter(get(type_column) %in% consequences)
+    filter(.data[[type_column]] %in% consequences)
   return(filtered_df)
 }
 
@@ -379,8 +381,9 @@ keep_consequences <- function(variant_df, consequences, type_column = "consequen
 #' @export
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 filter_depth <- function(small_variant_df, depth_limit = 0) {
-  filtered_df <- filter(small_variant_df, depth > depth_limit)
+  filtered_df <- filter(small_variant_df, .data$depth > depth_limit)
   return(filtered_df)
 }
 
@@ -394,8 +397,9 @@ filter_depth <- function(small_variant_df, depth_limit = 0) {
 #' @export
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 filter_germline_db <- function(small_variant_df) {
-  filtered_df <- filter(small_variant_df, !GermlineFilterDatabase)
+  filtered_df <- filter(small_variant_df, !.data$GermlineFilterDatabase)
   return(filtered_df)
 }
 
@@ -409,8 +413,9 @@ filter_germline_db <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 filter_germline_proxi <- function(small_variant_df) {
-  filtered_df <- filter(small_variant_df, !GermlineFilterProxi)
+  filtered_df <- filter(small_variant_df, !.data$GermlineFilterProxi)
   return(filtered_df)
 }
 
@@ -424,8 +429,9 @@ filter_germline_proxi <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 filter_for_cosmic_id <- function(small_variant_df) {
-  filtered_df <- filter(small_variant_df, !is.na(CosmicIDs))
+  filtered_df <- filter(small_variant_df, !is.na(.data$CosmicIDs))
   return(filtered_df)
 }
 
@@ -439,8 +445,9 @@ filter_for_cosmic_id <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 filter_for_included_in_tmb <- function(small_variant_df) {
-  filtered_df <- filter(small_variant_df, IncludedInTMBNumerator)
+  filtered_df <- filter(small_variant_df, .data$IncludedInTMBNumerator)
   return(filtered_df)
 }
 
@@ -457,7 +464,7 @@ filter_for_included_in_tmb <- function(small_variant_df) {
 parse_p_dot_notation <- function(small_variant_df) {
   extract(
     data = small_variant_df,
-    col = p_dot_notation,
+    col = "p_dot_notation",
     into = c("np_id", "protein"),
     regex = "(NP_.+):.+\\((\\w{3}\\d+).+$",
     remove = FALSE
@@ -471,11 +478,12 @@ parse_p_dot_notation <- function(small_variant_df) {
 #' @return data frame
 #'
 #' @importFrom dplyr mutate
+#' @importFrom rlang .data
 update_annotation_join_columns <- function(small_variant_df) {
   mutated_df <- small_variant_df |>
     mutate(
-      protein = paste(gene, protein, sep = "_"),
-      coord_id = paste(chromosome, genomic_position, sep = "_")
+      protein = paste(.data$gene, .data$protein, sep = "_"),
+      coord_id = paste(.data$chromosome, .data$genomic_position, sep = "_")
     )
   return(mutated_df)
 }
@@ -527,7 +535,7 @@ add_tmb_variant_data <- function(small_variant_df, tmb_variant_df) {
 #' @importFrom rlang .data
 add_amplification_data <- function(small_variant_df, amplification_df) {
   prepared_amplification_df <- amplification_df |>
-    mutate(variant_type = if_else(fold_change < 1.0, "DEL", "DUP")) |>
+    mutate(variant_type = if_else(.data$fold_change < 1.0, "DEL", "DUP")) |>
     select(-.data$fold_change)
 
   joined_data <- small_variant_df |>
