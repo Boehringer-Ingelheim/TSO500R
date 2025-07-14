@@ -155,7 +155,7 @@ get_fusions <- function(cvo_obj, ...) {
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
 #' @importFrom rlang .data
-get_small_variants.combined.variant.output <- function(cvo_obj) {
+get_small_variants.combined.variant.output <- function(cvo_obj, ...) {
   suppressWarnings(
     if (all(is.na(cvo_obj$small_variants))) {
       small_variant_df <- data.frame()
@@ -182,7 +182,7 @@ get_small_variants.combined.variant.output <- function(cvo_obj) {
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
 #' @importFrom rlang .data
-get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
+get_gene_amplifications.combined.variant.output <- function(cvo_obj, ...) {
   suppressWarnings(
     if (all(is.na(cvo_obj$gene_amplifications)) && all(is.na(cvo_obj$copy_number_variants))) {
       gene_amplification_df <- data.frame()
@@ -215,7 +215,7 @@ get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
 #' @importFrom rlang .data
-get_splice_variants.combined.variant.output <- function(cvo_obj) {
+get_splice_variants.combined.variant.output <- function(cvo_obj, ...) {
   suppressWarnings(
     if (all(is.na(cvo_obj$splice_variants))) {
       splice_variant_df <- data.frame()
@@ -242,7 +242,7 @@ get_splice_variants.combined.variant.output <- function(cvo_obj) {
 #' @importFrom dplyr mutate select
 #' @importFrom tidyr everything
 #' @importFrom rlang .data
-get_fusions.combined.variant.output <- function(cvo_obj) {
+get_fusions.combined.variant.output <- function(cvo_obj, ...) {
   suppressWarnings(
     if (all(is.na(cvo_obj$fusions)) && all(is.na(cvo_obj$dna_fusions))) {
       fusion_df <- data.frame()

@@ -570,6 +570,7 @@ extract_metrics <- function(cvo_data, category = "tmb") {
 #' @importFrom dplyr bind_cols mutate select
 #' @importFrom purrr map_chr
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_metrics_df <- function(cvo_data) {
   tmb_df <- extract_metrics(cvo_data, category = "tmb")
   msi_df <- extract_metrics(cvo_data, category = "msi")
@@ -579,7 +580,7 @@ get_metrics_df <- function(cvo_data) {
       .x$analysis_details$dna_sample_id,
       .x$analysis_details$pair_id
     ))) |>
-    select(sample_id, everything())
+    select(.data$sample_id, everything())
   return(metrics_df)
 }
 
@@ -595,6 +596,7 @@ get_metrics_df <- function(cvo_data) {
 #' @importFrom dplyr mutate select
 #' @importFrom purrr map_chr
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_analysis_details_df <- function(cvo_data) {
   analysis_details <- extract_metrics(cvo_data, category = "analysis_details")
   analysis_details_df <- analysis_details |>
@@ -602,7 +604,7 @@ get_analysis_details_df <- function(cvo_data) {
       .x$analysis_details$dna_sample_id,
       .x$analysis_details$pair_id
     ))) |>
-    select(sample_id, everything())
+    select(.data$sample_id, everything())
   return(analysis_details_df)
 }
 
@@ -618,6 +620,7 @@ get_analysis_details_df <- function(cvo_data) {
 #' @importFrom dplyr mutate select
 #' @importFrom purrr map_chr
 #' @importFrom tidyr everything
+#' @importFrom rlang .data
 get_sequencing_run_details_df <- function(cvo_data) {
   sequencing_run_details <- extract_metrics(cvo_data, category = "sequencing_run_details")
   sequencing_run_details_df <- sequencing_run_details |>
@@ -625,7 +628,7 @@ get_sequencing_run_details_df <- function(cvo_data) {
       .x$analysis_details$dna_sample_id,
       .x$analysis_details$pair_id
     ))) |>
-    select(sample_id, everything())
+    select(.data$sample_id, everything())
   return(sequencing_run_details_df)
 }
 
@@ -636,14 +639,15 @@ get_sequencing_run_details_df <- function(cvo_data) {
 #'
 #' @return data.frame
 #'
-#' @importFrom dplyr group_by summarise select
+#' @importFrom dplyr group_by summarise select n
 #' @importFrom tibble add_column
+#' @importFrom rlang .data := 
 get_summarised_statistics_df <- function(data_df, column_name) {
   if (!(nrow(data_df) == 0)) {
     summarized_data_df <- data_df |>
-      group_by(sample_id) |>
+      group_by(.data$sample_id) |>
       summarise({{ column_name }} := n()) |>
-      select(sample_id, {{ column_name }})
+      select(.data$sample_id, {{ column_name }})
   } else {
     summarized_data_df <- data_df |>
       add_column(sample_id = "") |>
@@ -664,6 +668,7 @@ get_summarised_statistics_df <- function(data_df, column_name) {
 #' @importFrom dplyr mutate select full_join coalesce
 #' @importFrom purrr map_chr
 #' @importFrom tibble add_column
+#' @importFrom rlang .data
 get_count_df <- function(cvo_data) {
   # most of the following steps are taken to make sure that we get numbers for all samples and
   # variant types
@@ -672,7 +677,7 @@ get_count_df <- function(cvo_data) {
       .x$analysis_details$dna_sample_id,
       .x$analysis_details$pair_id
     ))) |>
-    select(sample_id) |>
+    select(.data$sample_id) |>
     add_column(number_of_amplifications = NA) |>
     add_column(number_of_small_variants = NA) |>
     add_column(number_of_fusions = NA) |>
@@ -689,19 +694,19 @@ get_count_df <- function(cvo_data) {
 
   counts_df <- default_df |>
     full_join(amps, by = "sample_id") |>
-    mutate(number_of_amplifications = coalesce(number_of_amplifications.x, number_of_amplifications.y)) |>
+    mutate(number_of_amplifications = coalesce(.data$number_of_amplifications.x, .data$number_of_amplifications.y)) |>
     full_join(small_variants, by = "sample_id") |>
-    mutate(number_of_small_variants = coalesce(number_of_small_variants.x, number_of_small_variants.y)) |>
+    mutate(number_of_small_variants = coalesce(.data$number_of_small_variants.x, .data$number_of_small_variants.y)) |>
     full_join(fusions, by = "sample_id") |>
-    mutate(number_of_fusions = coalesce(number_of_fusions.x, number_of_fusions.y)) |>
+    mutate(number_of_fusions = coalesce(.data$number_of_fusions.x, .data$number_of_fusions.y)) |>
     full_join(splice_variants, by = "sample_id") |>
-    mutate(number_of_splice_variants = coalesce(number_of_splice_variants.x, number_of_splice_variants.y)) |>
-    select(sample_id, number_of_amplifications, number_of_small_variants, number_of_fusions, number_of_splice_variants) |>
+    mutate(number_of_splice_variants = coalesce(.data$number_of_splice_variants.x, .data$number_of_splice_variants.y)) |>
+    select(.data$sample_id, .data$number_of_amplifications, .data$number_of_small_variants, .data$number_of_fusions, .data$number_of_splice_variants) |>
     mutate(
-      number_of_amplifications = ifelse(is.na(number_of_amplifications), 0, number_of_amplifications),
-      number_of_fusions = ifelse(is.na(number_of_fusions), 0, number_of_fusions),
-      number_of_small_variants = ifelse(is.na(number_of_small_variants), 0, number_of_small_variants),
-      number_of_splice_variants = ifelse(is.na(number_of_splice_variants), 0, number_of_splice_variants)
+      number_of_amplifications = ifelse(is.na(.data$number_of_amplifications), 0, .data$number_of_amplifications),
+      number_of_fusions = ifelse(is.na(.data$number_of_fusions), 0, .data$number_of_fusions),
+      number_of_small_variants = ifelse(is.na(.data$number_of_small_variants), 0, .data$number_of_small_variants),
+      number_of_splice_variants = ifelse(is.na(.data$number_of_splice_variants), 0, .data$number_of_splice_variants)
     )
 
   return(counts_df)
@@ -735,9 +740,6 @@ prepare_dataframe_for_oncoprint <- function(variant_data_frame, id_column = "sam
 #' Parses DRAGEN sample sheet and returns a dataframe
 #'
 #' @param samplesheet path to Illumina sample sheet
-#' @param id_column Column holding identifiers
-#' @param gene_column Column holding genes
-#' @param variant_type_column Column holding variant types
 #'
 #' @return names list of data frames (header, settings, data) holding sample sheet content
 #'
@@ -747,6 +749,7 @@ prepare_dataframe_for_oncoprint <- function(variant_data_frame, id_column = "sam
 #' @importFrom stringr str_split
 #' @importFrom purrr discard
 #' @importFrom tidyr pivot_wider
+#' @importFrom rlang .data
 parse_illumina_samplesheet <- function(samplesheet) {
   # illumina sample sheet sections
   HEADER_STRING <- "[Header]"
@@ -765,14 +768,14 @@ parse_illumina_samplesheet <- function(samplesheet) {
   end_header <- which(grepl(CHEMISTRY_STRING, split_samplesheet_string))
   header <- read_csv(I(split_samplesheet_string[start_header:end_header]), col_names = FALSE) |>
     discard(~ all(is.na(.))) |>
-    pivot_wider(names_from = X1, values_from = X2)
+    pivot_wider(names_from = .data$X1, values_from = .data$X2)
 
   # parse settings part of provided sample sheet
   start_settings <- pmatch(SETTINGS_STRING, split_samplesheet_string) + 1
   end_settings <- which(grepl(OVERRIDE_CYCLES_STRING, split_samplesheet_string))
   settings <- read_csv(I(split_samplesheet_string[start_settings:end_settings]), col_names = FALSE) |>
     discard(~ all(is.na(.))) |>
-    pivot_wider(names_from = X1, values_from = X2)
+    pivot_wider(names_from = .data$X1, values_from = .data$X2)
 
   # prase data part of provided sample sheet
   start_data <- pmatch(DATA_STRING, split_samplesheet_string) + 1
