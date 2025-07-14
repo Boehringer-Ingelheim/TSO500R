@@ -14,16 +14,18 @@
 #' @export
 #'
 #' @importFrom openxlsx createWorkbook saveWorkbook
-#' @importFrom purrr walk
+#' @importFrom purrr walk pwalk
 write_workbook <- function(workbook_name, data_frames, sheet_names) {
-  sheet_indices <- seq(length(data_frames))
+  sheet_indices <- seq_along(data_frames)
   workbook <- createWorkbook()
   pwalk(
     .l = list(data_frames, sheet_names, sheet_indices),
     .f = function(x, y, z) write_worksheet(x, y, z, workbook)
   )
-  saveWorkbook(wb = workbook,
-              file = paste0(workbook_name, "_", Sys.Date(), ".xlsx"), overwrite = TRUE)
+  saveWorkbook(
+    wb = workbook,
+    file = paste0(workbook_name, "_", Sys.Date(), ".xlsx"), overwrite = TRUE
+  )
 }
 
 #' Write worksheet to Excel workbook.
@@ -33,7 +35,7 @@ write_workbook <- function(workbook_name, data_frames, sheet_names) {
 #' @param sheet_index the sheet index
 #' @param workbook the Excel workbook
 #'
-#' @return the Excel workbook 
+#' @return the Excel workbook
 #'
 #' @importFrom openxlsx addWorksheet writeDataTable
 write_worksheet <- function(data, sheet_name, sheet_index, workbook) {
@@ -65,11 +67,11 @@ write_rdata_file <- function(data_frames, file_path) {
 #' @export
 #'
 #' @importFrom utils write.table
-write_multiqc_data <- function(analysis_details_frame, sequencing_run_details_frame, variant_stats, tmb_msi_data_frame, 
+write_multiqc_data <- function(analysis_details_frame, sequencing_run_details_frame, variant_stats, tmb_msi_data_frame,
                                folder_path) {
   write.table(analysis_details_frame, paste0(folder_path, "analysis_details.txt"), row.names = FALSE)
   write.table(sequencing_run_details_frame, paste0(folder_path, "sequencing_run_details.txt"), row.names = FALSE)
-  write.table(variant_stats, paste0(folder_path, "variant_stats.txt"), row.name = FALSE)
+  write.table(variant_stats, paste0(folder_path, "variant_stats.txt"), row.names = FALSE)
   write.table(tmb_msi_data_frame, paste0(folder_path, "tmb_msi_statistics.txt"), row.names = FALSE)
 }
 
@@ -95,7 +97,7 @@ write_multiqc_data <- function(analysis_details_frame, sequencing_run_details_fr
 #' @importFrom dplyr mutate mutate_all select
 #' @importFrom tibble add_column
 #' @importFrom readr format_csv
-#' @importFrom stringr str_sub
+#' @importFrom stringr str_sub str_interp str_replace_all
 generate_dragen_samplesheet <- function(samplesheet, file_format_version = "2", run_name = "RunName", instrument_type =
                                           "NovaSeq", software_version = "3.10.9", adapter_read1, adapter_read2,
                                         adapter_behavior = "trim", patient_column = "Pat_ID",
@@ -140,11 +142,12 @@ ${tso500_data}"
     mutate(Sample_ID = paste(Sample_ID, Index_ID, sep = "_")) |>
     select(c(Sample_ID, index, index2)) |>
     add_column(
-               col_name1 = "",
-               col_name2 = "",
-               col_name3 = "",
-               col_name4 = "",
-               col_name5 = "") |>
+      col_name1 = "",
+      col_name2 = "",
+      col_name3 = "",
+      col_name4 = "",
+      col_name5 = ""
+    ) |>
     format_csv()
 
   # transform tso500 data
@@ -154,23 +157,23 @@ ${tso500_data}"
     mutate(Pair_ID = Sample_ID) |>
     add_column(Sample_Feature = "") |>
     add_column(Sample_Description = "") |>
-    mutate_all(~replace(., is.na(.), "")) |>
+    mutate_all(~ replace(., is.na(.), "")) |>
     format_csv()
 
   # replace values accordingly in template strings
   # content for the sample sheet header
-  dragen_header_string <- stringr::str_interp(dragen_samplesheet_header, list(file_format_version=file_format_version, run_name=run_name, instrument_type=instrument_type))
-  
+  dragen_header_string <- stringr::str_interp(dragen_samplesheet_header, list(file_format_version = file_format_version, run_name = run_name, instrument_type = instrument_type))
+
   # content for the bcl convert settings section
-  bclconvert_string <- stringr::str_interp(dragen_samplesheet_bclconvert, list(software_version=software_version,adapter_read1=adapter_read1,adapter_read2=adapter_read2,adapter_behavior=adapter_behavior,minimum_trimmed_read_length=minimum_trimmed_read_length,mask_short_reads=mask_short_reads))
-  
+  bclconvert_string <- stringr::str_interp(dragen_samplesheet_bclconvert, list(software_version = software_version, adapter_read1 = adapter_read1, adapter_read2 = adapter_read2, adapter_behavior = adapter_behavior, minimum_trimmed_read_length = minimum_trimmed_read_length, mask_short_reads = mask_short_reads))
+
   # content for the bcl convert data section
-  bclconvert_data_string <- stringr::str_interp(dragen_samplesheet_bclconvert_data, list(bclconvert_data=str_sub(bclconvert_data, end = -2)))
+  bclconvert_data_string <- stringr::str_interp(dragen_samplesheet_bclconvert_data, list(bclconvert_data = str_sub(bclconvert_data, end = -2)))
   bclconvert_data_string <- stringr::str_replace_all(bclconvert_data_string, "col_name\\w+", "")
-  
+
   # content for the TSO500 data section
-  tso500_data_string <- stringr::str_interp(dragen_samplesheet_tso500_data, list(tso500_data=str_sub(tso500_data, end = -2)))
-  
+  tso500_data_string <- stringr::str_interp(dragen_samplesheet_tso500_data, list(tso500_data = str_sub(tso500_data, end = -2)))
+
   # write csv file
-  cat(paste(dragen_header_string,dragen_samplesheet_reads,bclconvert_string,bclconvert_data_string,tso500_data_string, sep="\n"), file = outfile)
+  cat(paste(dragen_header_string, dragen_samplesheet_reads, bclconvert_string, bclconvert_data_string, tso500_data_string, sep = "\n"), file = outfile)
 }

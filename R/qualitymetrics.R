@@ -7,9 +7,9 @@
 #' @param ctdna specifies whether quality metrics have been generated using ctdna workflow
 #'
 #' @return A quality.metrics.output object
-#' 
+#'
 #' @export
-qualitymetrics <- function(metrics_file_path, local_app=FALSE, ctdna=FALSE) {
+qualitymetrics <- function(metrics_file_path, local_app = FALSE, ctdna = FALSE) {
   new_combined_quality_metrics_output(metrics_file_path, local_app, ctdna)
 }
 
@@ -26,34 +26,39 @@ qualitymetrics <- function(metrics_file_path, local_app=FALSE, ctdna=FALSE) {
 #' @importFrom stringr str_split
 #' @importFrom purrr map
 new_combined_quality_metrics_output <- function(metrics_file_path, local_app = FALSE, ctdna = FALSE) {
-
   qm_file <- read_file(metrics_file_path)
   split_qmo_string <- str_split(string = qm_file, pattern = "\\[") |> unlist()
-  
+
   notes_section_index <- ifelse(ctdna, 10, 12)
 
   # handle the parts of the file that are structured as key-value pairs
   # i.e. header and notes sections
-  records <- map(split_qmo_string[c(2,notes_section_index)], parse_qmo_record)
+  records <- map(split_qmo_string[c(2, notes_section_index)], parse_qmo_record)
   names(records) <- c("header", "notes")
 
   # handle the parts of the file that are structured as tabular data
-  # i.e. run qc metrics, analysis status etc. 
-  tables <- map(split_qmo_string[3:(notes_section_index-1)], parse_qmo_table)
+  # i.e. run qc metrics, analysis status etc.
+  tables <- map(split_qmo_string[3:(notes_section_index - 1)], parse_qmo_table)
 
   # the order of tables is different between local app and DRAGEN analysis pipeline
   if (local_app) {
-    names(tables) <- c("run_qc_metrics", "analysis_status", "dna_qc_metrics", "dna_qc_metrics_snvtmb",
-                       "dna_qc_metrics_msi", "dna_qc_metrics_cnv", "dna_expanded_metrics", "rna_qc_metrics", 
-                       "rna_expanded_metrics")
+    names(tables) <- c(
+      "run_qc_metrics", "analysis_status", "dna_qc_metrics", "dna_qc_metrics_snvtmb",
+      "dna_qc_metrics_msi", "dna_qc_metrics_cnv", "dna_expanded_metrics", "rna_qc_metrics",
+      "rna_expanded_metrics"
+    )
   } else {
     if (ctdna) {
-      names(tables) <- c("run_qc_metrics", "analysis_status", "dna_qc_metrics", "dna_qc_metrics_snvtmb",
-                         "dna_qc_metrics_msi", "dna_qc_metrics_cnv", "dna_expanded_metrics")
+      names(tables) <- c(
+        "run_qc_metrics", "analysis_status", "dna_qc_metrics", "dna_qc_metrics_snvtmb",
+        "dna_qc_metrics_msi", "dna_qc_metrics_cnv", "dna_expanded_metrics"
+      )
     } else {
-      names(tables) <- c("run_qc_metrics", "analysis_status", "dna_qc_metrics", "dna_qc_metrics_snvtmb",
-                         "dna_qc_metrics_msi", "dna_qc_metrics_cnv", "rna_qc_metrics", "dna_expanded_metrics",
-                         "rna_expanded_metrics")
+      names(tables) <- c(
+        "run_qc_metrics", "analysis_status", "dna_qc_metrics", "dna_qc_metrics_snvtmb",
+        "dna_qc_metrics_msi", "dna_qc_metrics_cnv", "rna_qc_metrics", "dna_expanded_metrics",
+        "rna_expanded_metrics"
+      )
     }
   }
 
@@ -79,6 +84,7 @@ validate_tso500_qc <- function() {}
 #' @export
 #'
 #' @importFrom purrr map set_names
+#' @importFrom stringr str_remove
 read_qmo_data <- function(qmo_directory, local_app = FALSE, ctdna = FALSE) {
   qmo_files <- list.files(
     path = qmo_directory,
@@ -211,12 +217,11 @@ get_rna_expanded_metrics <- function(qmo_obj, ...) {
 #' @importFrom dplyr select
 get_run_qc_metrics.combined.quality.metrics.output <- function(qmo_obj) {
   suppressWarnings(
-    if(all(is.na(qmo_obj$run_qc_metrics))){
+    if (all(is.na(qmo_obj$run_qc_metrics))) {
       run_qc_metrics_df <- data.frame()
     } else {
-      run_qc_metrics_df <- qmo_obj$run_qc_metrics |> 
+      run_qc_metrics_df <- qmo_obj$run_qc_metrics |>
         select(metric_uom, lsl_guideline, usl_guideline, value)
-
     }
   )
   return(run_qc_metrics_df)
@@ -234,12 +239,12 @@ get_run_qc_metrics.combined.quality.metrics.output <- function(qmo_obj) {
 #' @importFrom tidyr pivot_longer pivot_wider
 get_analysis_status.combined.quality.metrics.output <- function(qmo_obj) {
   suppressWarnings(
-    if(all(is.na(qmo_obj$analysis_status))){
+    if (all(is.na(qmo_obj$analysis_status))) {
       analysis_status_df <- data.frame()
     } else {
       analysis_status_df <- qmo_obj$analysis_status |>
         rename(metric = x) |>
-        mutate(across(is.logical, ~as.character(.x))) |> #otherwise pivot_longer will fail due to logical + character
+        mutate(across(is.logical, ~ as.character(.x))) |> # otherwise pivot_longer will fail due to logical + character
         pivot_longer(!metric, names_to = "sample_id") |>
         pivot_wider(names_from = metric, values_from = value)
     }
@@ -324,7 +329,7 @@ get_dna_qc_metrics_msi.combined.quality.metrics.output <- function(qmo_obj) {
 #' @importFrom tidyr pivot_longer pivot_wider
 get_dna_qc_metrics_cnv.combined.quality.metrics.output <- function(qmo_obj) {
   suppressWarnings(
-    if (all(is.na(qmo_obj$dna_qc_metrics_cnv))){
+    if (all(is.na(qmo_obj$dna_qc_metrics_cnv))) {
       dna_qc_metrics_cnv_df <- data.frame()
     } else {
       dna_qc_metrics_cnv_df <- qmo_obj$dna_qc_metrics_cnv |>
@@ -437,11 +442,12 @@ parse_qmo_table <- function(table_string) {
 
   header_line <- str_extract(intermediate, ".+\n")
 
-  if(str_detect(header_line, "\\t\\n")) {
+  if (str_detect(header_line, "\\t\\n")) {
     intermediate <- str_replace_all(
-                                    string = intermediate,
-                                    pattern = "\\t\\n",
-                                    replacement = "\n")
+      string = intermediate,
+      pattern = "\\t\\n",
+      replacement = "\n"
+    )
   }
 
   table_data <- intermediate |> handle_empty_qmo_table_values()
@@ -457,7 +463,7 @@ parse_qmo_table <- function(table_string) {
 #' @importFrom stringr str_detect
 #' @importFrom utils read.table
 #' @importFrom janitor clean_names
-handle_empty_qmo_table_values <- function(intermediate_tbl){
+handle_empty_qmo_table_values <- function(intermediate_tbl) {
   if (str_detect(string = intermediate_tbl, pattern = "\\nNA$")) {
     return(NA)
   } else {
@@ -525,11 +531,11 @@ make_qc_table <- function(qc_df, id_col = "sample_id", group_name = "samples") {
     # ignore contamination p value since it is only relevant in case of failed
     # contamination score
     if (metric != p_value_field) {
-      if(metric == contamination_field & (p_value_field %in% metrics)) {
+      if (metric == contamination_field && (p_value_field %in% metrics)) {
         qc_failure_count <- qc_failure_count +
           replace_na(run_metrics_df[[metric]] < lsl[[metric]], 0) +
-          replace_na(run_metrics_df[[metric]] > usl[[metric]] & run_metrics_df[[p_value_field]] <= 
-                       usl[[p_value_field]], 0)
+          replace_na(run_metrics_df[[metric]] > usl[[metric]] & run_metrics_df[[p_value_field]] <=
+            usl[[p_value_field]], 0)
       } else {
         qc_failure_count <- qc_failure_count +
           replace_na(run_metrics_df[[metric]] < lsl[[metric]], 0) +
@@ -556,17 +562,16 @@ make_qc_table <- function(qc_df, id_col = "sample_id", group_name = "samples") {
         rows = group == group_name,
         fn = \(x) {
           p_value_available <- p_value_field %in% metrics
-          if(p_value_available) {
+          if (p_value_available) {
             case_when(
               metric == p_value_field ~ "white",
-              (p_value_available & metric == contamination_field & (x > usl[[metric]] & 
-                                                                    run_metrics_df[[p_value_field]] <= usl[[p_value_field]])) ~ "#F5CDB9",
-              (metric != contamination_field & x < lsl[[metric]]) ~ "#D2F2F7",
-              (metric != contamination_field & x > usl[[metric]]) ~ "#F5CDB9",
+              (p_value_available && metric == contamination_field && (x > usl[[metric]] &&
+                run_metrics_df[[p_value_field]] <= usl[[p_value_field]])) ~ "#F5CDB9",
+              (metric != contamination_field && x < lsl[[metric]]) ~ "#D2F2F7",
+              (metric != contamination_field && x > usl[[metric]]) ~ "#F5CDB9",
               .default = "white"
             )
-          }
-          else {
+          } else {
             case_when(
               x < lsl[[metric]] ~ "#D2F2F7",
               x > usl[[metric]] ~ "#F5CDB9",
@@ -574,15 +579,15 @@ make_qc_table <- function(qc_df, id_col = "sample_id", group_name = "samples") {
             )
           }
         }
-    )
+      )
   }
 
   # separate the "n_failed" column visually
   table_out <- table_out |>
-      gt::tab_style(
-          style = gt::cell_borders(sides = "left", weight = "2px", color = "lightgrey"),
-          locations = gt::cells_body(columns = "n_failed")
-      )
+    gt::tab_style(
+      style = gt::cell_borders(sides = "left", weight = "2px", color = "lightgrey"),
+      locations = gt::cells_body(columns = "n_failed")
+    )
 
   table_out
 }

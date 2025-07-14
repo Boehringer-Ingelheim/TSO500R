@@ -6,10 +6,10 @@
 #' @param local_app specifies whether the data is coming from local app
 #'
 #' @return A cnv.output object
-#' 
+#'
 #' @export
 cnv <- function(cnv_file_path, local_app = FALSE) {
-  new_cnv_output(cnv_file_path)
+  new_cnv_output(cnv_file_path, local_app)
 }
 
 #' Constructor function for combined.cnv.output objects
@@ -20,9 +20,11 @@ cnv <- function(cnv_file_path, local_app = FALSE) {
 #'
 #' @return A combined.cnv.output object
 #'
-#' @importFrom dplyr tibble
+#' @importFrom tibble tibble
+#' @importFrom dplyr mutate select relocate
+#' @importFrom tidyr unnest
+#' @importFrom stringr str_replace
 new_cnv_output <- function(cnv_file_path, local_app = FALSE) {
-
   cnv_data <- tibble(file = cnv_file_path) |>
     mutate(data = lapply(file, parse_vcf_to_df)) |>
     unnest(data) |>
@@ -51,7 +53,7 @@ read_cnv_data <- function(cnv_directory, local_app = FALSE) {
     recursive = TRUE,
     full.names = TRUE
   )
-  cnv_data <- map(cnv_files, cnv, local_app)  |>
+  cnv_data <- map(cnv_files, cnv, local_app) |>
     set_names(str_remove(basename(cnv_files), "\\.vcf$"))
   cnv_data
 }
@@ -68,7 +70,7 @@ read_cnv_data <- function(cnv_directory, local_app = FALSE) {
 #' @importFrom tibble tibble
 #' @importFrom stringr str_replace
 #' @importFrom tidyr unnest
-#' @importFrom dplyr relocate mutate
+#' @importFrom dplyr relocate mutate select
 summarize_cnv_data <- function(cnv_directory) {
   cnv_files <- list.files(
     path = cnv_directory,

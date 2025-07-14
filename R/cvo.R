@@ -27,7 +27,6 @@ cvo <- function(cvo_file_path, local_app = FALSE, ctdna = FALSE) {
 #' @importFrom purrr map
 #' @importFrom stats na.omit
 new_combined_variant_output <- function(cvo_file_path, local_app = FALSE, ctdna = FALSE) {
-
   ANALYSIS_DETAILS_STRING <- "Analysis Details"
   GENE_AMP_STRING <- c("Gene Amplifications", "Copy Number Variants")
   PERCENT_MSI_STRING <- "Percent Unstable MSI Sites|SUM_JSD"
@@ -36,7 +35,7 @@ new_combined_variant_output <- function(cvo_file_path, local_app = FALSE, ctdna 
   split_cvo_string <- str_split(string = cvo_file, pattern = "\\[") |> unlist()
 
   # parse analysis details, sequencing run details, TMB, and MSI part of provided CombinedVariantOutput file
-  start_info <- which(grepl(ANALYSIS_DETAILS_STRING,split_cvo_string))
+  start_info <- which(grepl(ANALYSIS_DETAILS_STRING, split_cvo_string))
   end_info <- which(grepl(PERCENT_MSI_STRING, split_cvo_string))
 
   # handle the parts of the file that are structured as key-value pairs
@@ -92,7 +91,8 @@ read_cvo_data <- function(cvo_directory, local_app = FALSE, ctdna = FALSE) {
   )
   cvo_data <- map(cvo_files, cvo, local_app, ctdna)
   names(cvo_data) <- map(cvo_data, ~ ifelse(ctdna, .x$analysis_details$dna_sample_id,
-                                                   .x$analysis_details$pair_id))
+    .x$analysis_details$pair_id
+  ))
   cvo_data
 }
 
@@ -156,15 +156,16 @@ get_fusions <- function(cvo_obj, ...) {
 #' @importFrom tidyr everything
 get_small_variants.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
-    if(all(is.na(cvo_obj$small_variants))){
+    if (all(is.na(cvo_obj$small_variants))) {
       small_variant_df <- data.frame()
     } else {
       small_variant_df <- cvo_obj$small_variants |>
         mutate(sample_id = ifelse(is.null(cvo_obj$analysis_details$pair_id),
-                                  cvo_obj$analysis_details$dna_sample_id,
-                                  cvo_obj$analysis_details$pair_id)) |>
+          cvo_obj$analysis_details$dna_sample_id,
+          cvo_obj$analysis_details$pair_id
+        )) |>
         select(sample_id, everything())
-  }
+    }
   )
   return(small_variant_df)
 }
@@ -181,7 +182,7 @@ get_small_variants.combined.variant.output <- function(cvo_obj) {
 #' @importFrom tidyr everything
 get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
-    if (all(is.na(cvo_obj$gene_amplifications)) & all(is.na(cvo_obj$copy_number_variants))) {
+    if (all(is.na(cvo_obj$gene_amplifications)) && all(is.na(cvo_obj$copy_number_variants))) {
       gene_amplification_df <- data.frame()
     } else {
       if (is.null(cvo_obj$gene_amplifications)) {
@@ -192,8 +193,9 @@ get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
 
       gene_amplification_df <- gene_amplification_df |>
         mutate(sample_id = ifelse(is.null(cvo_obj$analysis_details$pair_id),
-                                  cvo_obj$analysis_details$dna_sample_id,
-                                  cvo_obj$analysis_details$pair_id)) |>
+          cvo_obj$analysis_details$dna_sample_id,
+          cvo_obj$analysis_details$pair_id
+        )) |>
         select(sample_id, everything())
     }
   )
@@ -212,13 +214,14 @@ get_gene_amplifications.combined.variant.output <- function(cvo_obj) {
 #' @importFrom tidyr everything
 get_splice_variants.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
-    if (all(is.na(cvo_obj$splice_variants))){
+    if (all(is.na(cvo_obj$splice_variants))) {
       splice_variant_df <- data.frame()
     } else {
       splice_variant_df <- cvo_obj$splice_variants |>
         mutate(sample_id = ifelse(is.null(cvo_obj$analysis_details$pair_id),
-                                  cvo_obj$analysis_details$dna_sample_id,
-                                  cvo_obj$analysis_details$pair_id)) |>
+          cvo_obj$analysis_details$dna_sample_id,
+          cvo_obj$analysis_details$pair_id
+        )) |>
         select(sample_id, everything())
     }
   )
@@ -237,10 +240,10 @@ get_splice_variants.combined.variant.output <- function(cvo_obj) {
 #' @importFrom tidyr everything
 get_fusions.combined.variant.output <- function(cvo_obj) {
   suppressWarnings(
-    if (all(is.na(cvo_obj$fusions)) & all(is.na(cvo_obj$dna_fusions))) {
+    if (all(is.na(cvo_obj$fusions)) && all(is.na(cvo_obj$dna_fusions))) {
       fusion_df <- data.frame()
     } else {
-      if(is.null(cvo_obj$fusions)) {
+      if (is.null(cvo_obj$fusions)) {
         fusion_df <- cvo_obj$dna_fusions
       } else {
         fusion_df <- cvo_obj$fusions
@@ -248,8 +251,9 @@ get_fusions.combined.variant.output <- function(cvo_obj) {
 
       fusion_df <- fusion_df |>
         mutate(sample_id = ifelse(is.null(cvo_obj$analysis_details$pair_id),
-                                         cvo_obj$analysis_details$dna_sample_id,
-                                         cvo_obj$analysis_details$pair_id)) |>
+          cvo_obj$analysis_details$dna_sample_id,
+          cvo_obj$analysis_details$pair_id
+        )) |>
         select(sample_id, everything())
     }
   )
@@ -273,9 +277,9 @@ parse_cvo_record <- function(record_string) {
     str_remove("\\t$") |>
     str_split("\\t") |>
     # replace all string NAs with NA to avoid warnings from as.numeric
-    rapply(., function(x) ifelse(x=="NA",NA,x), how = "replace")
+    rapply(., function(x) ifelse(x == "NA", NA, x), how = "replace")
 
-  if(str_detect(record_string, "\\[TMB\\]|\\[MSI\\]")){
+  if (str_detect(record_string, "\\[TMB\\]|\\[MSI\\]")) {
     record <- map(intermediate, ~ as.numeric(.x[2]))
   } else {
     record <- map(intermediate, ~ .x[2])
@@ -299,9 +303,10 @@ parse_cvo_table <- function(table_string) {
 
   if (str_detect(header_line, "\\t\\n")) {
     intermediate <- str_replace_all(
-                                    string = intermediate,
-                                    pattern = "\\t\\n",
-                                    replacement = "\n")
+      string = intermediate,
+      pattern = "\\t\\n",
+      replacement = "\n"
+    )
   }
 
   table_data <- intermediate |> handle_empty_cvo_table_values()

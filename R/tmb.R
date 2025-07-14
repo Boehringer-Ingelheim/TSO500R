@@ -22,8 +22,9 @@ tmb <- function(tmb_file_path){
 #'
 #' @importFrom readr read_tsv
 #' @importFrom tidyr unnest
-#' @importFrom dplyr mutate relocate
+#' @importFrom dplyr mutate relocate select
 #' @importFrom stringr str_replace
+#' @importFrom tibble tibble
 read_tmb_trace_data <- function(tmb_directory) {
   tmb_files <- list.files(
     path = tmb_directory,
@@ -53,8 +54,9 @@ read_tmb_trace_data <- function(tmb_directory) {
 #'
 #' @importFrom jsonlite read_json
 #' @importFrom tidyr unnest_wider
-#' @importFrom dplyr mutate relocate
+#' @importFrom dplyr mutate relocate select
 #' @importFrom stringr str_replace
+#' @importFrom tibble tibble
 read_tmb_details_data <- function(tmb_directory) {
   tmb_files <- list.files(
     path = tmb_directory,

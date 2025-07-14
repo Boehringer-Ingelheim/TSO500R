@@ -5,8 +5,12 @@
 #'
 #' @return list of data.frame
 #' @export
-read_annotation_data <- function(annotation_data_path, sheet_names){
-  annotations <- map(sheet_names, ~ readxl::read_excel(annotation_data_path, sheet = .x) |> janitor::clean_names())
+#'
+#' @importFrom purrr map
+#' @importFrom readxl read_excel
+#' @importFrom janitor clean_names
+read_annotation_data <- function(annotation_data_path, sheet_names) {
+  annotations <- map(sheet_names, ~ read_excel(annotation_data_path, sheet = .x) |> clean_names())
   names(annotations) <- sheet_names
   return(annotations)
 }

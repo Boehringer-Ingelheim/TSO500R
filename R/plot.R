@@ -4,18 +4,21 @@
 #' @param small_variant_df Data frame containing small variants
 #'
 #' @return ggplot object
-#' 
+#'
 #' @export
-plot_af_per_variant_consequence <- function(small_variant_df){
+#'
+#' @importFrom ggplot2 ggplot geom_jitter aes facet_wrap theme element_line element_text element_blank
+plot_af_per_variant_consequence <- function(small_variant_df) {
   g <- ggplot(data = small_variant_df) +
     geom_jitter(aes(x = sample_id, y = allele_frequency, colour = consequence_s),
-                size= 0.5, shape = 19, alpha = 0.7) +
+      size = 0.5, shape = 19, alpha = 0.7
+    ) +
     facet_wrap(~consequence_s, ncol = 5) +
     theme(
       panel.grid.major = element_line(color = "grey", linetype = 3, size = 0.1),
       strip.background = element_blank(),
-      strip.text = element_text(size=3),
-      axis.title = element_text(size=8)
+      strip.text = element_text(size = 3),
+      axis.title = element_text(size = 8)
     )
   return(g)
 }
@@ -26,17 +29,24 @@ plot_af_per_variant_consequence <- function(small_variant_df){
 #' @param small_variant_df Data frame containing small variants
 #'
 #' @return ggplot object
-#' 
+#'
 #' @export
-plot_af_histogram <- function(small_variant_df){
-  g <- ggplot(small_variant_df, aes(x = allele_frequency, group = sample_id,
-                                    colour = sample_id, fill = sample_id)) +
-    geom_histogram(alpha=0.3, binwidth = 0.025) +
+#'
+#' @importFrom ggplot2 ggplot geom_histogram aes facet_wrap theme element_line
+plot_af_histogram <- function(small_variant_df) {
+  g <- ggplot(small_variant_df, aes(
+    x = allele_frequency, group = sample_id,
+    colour = sample_id, fill = sample_id
+  )) +
+    geom_histogram(alpha = 0.3, binwidth = 0.025) +
     facet_wrap(~sample_id, ncol = 4) +
     theme(
-      panel.grid.major = element_line(color = "grey",
-                                      linetype = 3,
-                                      size = 0.4))
+      panel.grid.major = element_line(
+        color = "grey",
+        linetype = 3,
+        size = 0.4
+      )
+    )
   return(g)
 }
 
@@ -47,14 +57,20 @@ plot_af_histogram <- function(small_variant_df){
 #'
 #' @return ggplot object
 #' @export
-plot_af_density <- function(small_variant_df){
-  g <- ggplot(small_variant_df, aes(x = allele_frequency, group = sample_id,
-                                    colour = sample_id, fill = sample_id)) +
-    geom_density(alpha=0.3) +
+#'
+#' @importFrom ggplot2 ggplot geom_density aes facet_wrap theme element_line
+plot_af_density <- function(small_variant_df) {
+  g <- ggplot(small_variant_df, aes(
+    x = allele_frequency, group = sample_id,
+    colour = sample_id, fill = sample_id
+  )) +
+    geom_density(alpha = 0.3) +
     facet_wrap(~sample_id, ncol = 4) +
-    theme(panel.grid.major = element_line(color = "grey",
-                                          linetype = 3,
-                                          size = 0.4))
+    theme(panel.grid.major = element_line(
+      color = "grey",
+      linetype = 3,
+      size = 0.4
+    ))
   return(g)
 }
 
@@ -75,26 +91,29 @@ plot_af_density <- function(small_variant_df){
 #' @return ComplexHeatmap object
 #'
 #' @export
-plot_onco_print <- function(variant_matrix, column_title, alter_list, variant_colors, heatmap_legend, bottom_annotation=ComplexHeatmap::anno_empty(border = FALSE), top_annotation=anno_empty(border = FALSE), right_annotation=anno_empty(border = FALSE), left_annotation=anno_empty(border = FALSE), top=nrow(variant_matrix)){
+#'
+#' @importFrom ComplexHeatmap oncoPrint HeatmapAnnotation rowAnnotation anno_empty anno_oncoprint_barplot
+plot_onco_print <- function(variant_matrix, column_title, alter_list, variant_colors, heatmap_legend, bottom_annotation = ComplexHeatmap::anno_empty(border = FALSE), top_annotation = anno_empty(border = FALSE), right_annotation = anno_empty(border = FALSE), left_annotation = anno_empty(border = FALSE), top = nrow(variant_matrix)) {
   # get top x genes
-  top_index = order(apply(variant_matrix, 1, function(x) sum(x != "")), decreasing = TRUE)[1:top]
+  top_index <- order(apply(variant_matrix, 1, function(x) sum(x != "")), decreasing = TRUE)[1:top]
   variant_matrix_top <- variant_matrix[top_index, ]
 
   onco_print <- ComplexHeatmap::oncoPrint(variant_matrix_top,
-          alter_fun = alter_list, col = variant_colors, 
-          column_title = column_title,
-          show_column_names = TRUE,
-          show_row_names = TRUE,
-          show_pct = TRUE,
-          remove_empty_rows = TRUE,
-          heatmap_legend_param = heatmap_legend_param,
-
-          top_annotation = ComplexHeatmap::HeatmapAnnotation(ta = top_annotation, 
-            cbar = anno_oncoprint_barplot(height = unit(4, "cm")), show_annotation_name = FALSE),
-          bottom_annotation = HeatmapAnnotation(ba = bottom_annotation, show_annotation_name = FALSE),
-          right_annotation = rowAnnotation(ra = right_annotation, show_annotation_name = FALSE),
-          left_annotation = rowAnnotation(la = left_annotation, show_annotation_name = FALSE)
-        )
+    alter_fun = alter_list, col = variant_colors,
+    column_title = column_title,
+    show_column_names = TRUE,
+    show_row_names = TRUE,
+    show_pct = TRUE,
+    remove_empty_rows = TRUE,
+    heatmap_legend_param = heatmap_legend,
+    top_annotation = ComplexHeatmap::HeatmapAnnotation(
+      ta = top_annotation,
+      cbar = anno_oncoprint_barplot(height = unit(4, "cm")), show_annotation_name = FALSE
+    ),
+    bottom_annotation = HeatmapAnnotation(ba = bottom_annotation, show_annotation_name = FALSE),
+    right_annotation = rowAnnotation(ra = right_annotation, show_annotation_name = FALSE),
+    left_annotation = rowAnnotation(la = left_annotation, show_annotation_name = FALSE)
+  )
   return(onco_print)
 }
 
@@ -114,7 +133,7 @@ add_common_theme_elements <- function(ggplot_object) {
     axis.text = element_text(size = 5),
     legend.title = element_blank(),
     legend.position = "none",
-    panel.background = element_rect(fill = 'white'),
+    panel.background = element_rect(fill = "white"),
     panel.border = element_rect(fill = NA, color = "black")
   )
   g2 <- ggplot_object + common_theme_elements
