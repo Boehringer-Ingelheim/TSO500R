@@ -2,7 +2,7 @@
 % Please edit documentation in R/wrangle.R
 \name{add_amplification_data}
 \alias{add_amplification_data}
-\title{Adds amplifications to small variant data, 
+\title{Adds amplifications to small variant data,
 variant type (consequence_s) column renamed to variant_type}
 \usage{
 add_amplification_data(small_variant_df, amplification_df)
@@ -16,6 +16,6 @@ add_amplification_data(small_variant_df, amplification_df)
 joined data frame
 }
 \description{
-Adds amplifications to small variant data, 
+Adds amplifications to small variant data,
 variant type (consequence_s) column renamed to variant_type
 }

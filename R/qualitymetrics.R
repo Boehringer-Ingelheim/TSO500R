@@ -221,7 +221,7 @@ get_run_qc_metrics.combined.quality.metrics.output <- function(qmo_obj, ...) {
       run_qc_metrics_df <- data.frame()
     } else {
       run_qc_metrics_df <- qmo_obj$run_qc_metrics |>
-        select(metric_uom, lsl_guideline, usl_guideline, value)
+        select(.data$metric_uom, .data$lsl_guideline, .data$usl_guideline, .data$value)
     }
   )
   return(run_qc_metrics_df)
@@ -285,14 +285,15 @@ get_dna_qc_metrics.combined.quality.metrics.output <- function(qmo_obj, ...) {
 #' @export
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom rlang .data
 get_dna_qc_metrics_snvtmb.combined.quality.metrics.output <- function(qmo_obj, ...) {
   suppressWarnings(
     if (all(is.na(qmo_obj$dna_qc_metrics_snvtmb))) {
       dna_qc_metrics_snvtmb_df <- data.frame()
     } else {
       dna_qc_metrics_snvtmb_df <- qmo_obj$dna_qc_metrics_snvtmb |>
-        pivot_longer(!metric_uom, names_to = "sample_id") |>
-        pivot_wider(names_from = metric_uom)
+        pivot_longer(!.data$metric_uom, names_to = "sample_id") |>
+        pivot_wider(names_from = .data$metric_uom)
     }
   )
   return(dna_qc_metrics_snvtmb_df)
@@ -307,14 +308,15 @@ get_dna_qc_metrics_snvtmb.combined.quality.metrics.output <- function(qmo_obj, .
 #' @export
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom rlang .data
 get_dna_qc_metrics_msi.combined.quality.metrics.output <- function(qmo_obj, ...) {
   suppressWarnings(
     if (all(is.na(qmo_obj$dna_qc_metrics_msi))) {
       dna_qc_metrics_msi_df <- data.frame()
     } else {
       dna_qc_metrics_msi_df <- qmo_obj$dna_qc_metrics_msi |>
-        pivot_longer(!metric_uom, names_to = "sample_id") |>
-        pivot_wider(names_from = metric_uom)
+        pivot_longer(!.data$metric_uom, names_to = "sample_id") |>
+        pivot_wider(names_from = .data$metric_uom)
     }
   )
   return(dna_qc_metrics_msi_df)
@@ -329,14 +331,15 @@ get_dna_qc_metrics_msi.combined.quality.metrics.output <- function(qmo_obj, ...)
 #' @export
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom rlang .data
 get_dna_qc_metrics_cnv.combined.quality.metrics.output <- function(qmo_obj, ...) {
   suppressWarnings(
     if (all(is.na(qmo_obj$dna_qc_metrics_cnv))) {
       dna_qc_metrics_cnv_df <- data.frame()
     } else {
       dna_qc_metrics_cnv_df <- qmo_obj$dna_qc_metrics_cnv |>
-        pivot_longer(!metric_uom, names_to = "sample_id") |>
-        pivot_wider(names_from = metric_uom)
+        pivot_longer(!.data$metric_uom, names_to = "sample_id") |>
+        pivot_wider(names_from = .data$metric_uom)
     }
   )
   return(dna_qc_metrics_cnv_df)
@@ -351,14 +354,15 @@ get_dna_qc_metrics_cnv.combined.quality.metrics.output <- function(qmo_obj, ...)
 #' @export
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom rlang .data
 get_dna_expanded_metrics.combined.quality.metrics.output <- function(qmo_obj, ...) {
   suppressWarnings(
     if (all(is.na(qmo_obj$dna_expanded_metrics))) {
       dna_expanded_metrics_df <- data.frame()
     } else {
       dna_expanded_metrics_df <- qmo_obj$dna_expanded_metrics |>
-        pivot_longer(!metric_uom, names_to = "sample_id") |>
-        pivot_wider(names_from = metric_uom)
+        pivot_longer(!.data$metric_uom, names_to = "sample_id") |>
+        pivot_wider(names_from = .data$metric_uom)
     }
   )
   return(dna_expanded_metrics_df)
@@ -373,14 +377,15 @@ get_dna_expanded_metrics.combined.quality.metrics.output <- function(qmo_obj, ..
 #' @export
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom rlang .data
 get_rna_qc_metrics.combined.quality.metrics.output <- function(qmo_obj, ...) {
   suppressWarnings(
     if (all(is.na(qmo_obj$rna_qc_metrics))) {
       rna_qc_metrics_df <- data.frame()
     } else {
       rna_qc_metrics_df <- qmo_obj$rna_qc_metrics |>
-        pivot_longer(!metric_uom, names_to = "sample_id") |>
-        pivot_wider(names_from = metric_uom)
+        pivot_longer(!.data$metric_uom, names_to = "sample_id") |>
+        pivot_wider(names_from = .data$metric_uom)
     }
   )
   return(rna_qc_metrics_df)
@@ -395,14 +400,15 @@ get_rna_qc_metrics.combined.quality.metrics.output <- function(qmo_obj, ...) {
 #' @export
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom rlang .data
 get_rna_expanded_metrics.combined.quality.metrics.output <- function(qmo_obj, ...) {
   suppressWarnings(
     if (all(is.na(qmo_obj$rna_expanded_metrics))) {
       rna_expanded_metrics_df <- data.frame()
     } else {
       rna_expanded_metrics_df <- qmo_obj$rna_expanded_metrics |>
-        pivot_longer(!metric_uom, names_to = "sample_id") |>
-        pivot_wider(names_from = metric_uom)
+        pivot_longer(!.data$metric_uom, names_to = "sample_id") |>
+        pivot_wider(names_from = .data$metric_uom)
     }
   )
   return(rna_expanded_metrics_df)
@@ -498,6 +504,7 @@ trim_qmo_header_and_footer <- function(string) {
 #' @importFrom dplyr filter mutate select distinct rename bind_rows case_when
 #' @importFrom tidyr pivot_wider replace_na
 #' @importFrom gt gt data_color
+#' @importFrom rlang sym
 #'
 #' @export
 make_qc_table <- function(qc_df, id_col = "sample_id", group_name = "samples") {

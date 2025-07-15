@@ -4,7 +4,7 @@
 \alias{get_gene_amplifications.combined.variant.output}
 \title{Get gene amplifications from combined.variant.output object}
 \usage{
-\method{get_gene_amplifications}{combined.variant.output}(cvo_obj)
+\method{get_gene_amplifications}{combined.variant.output}(cvo_obj, ...)
 }
 \arguments{
 \item{cvo_obj}{cvo_obj}

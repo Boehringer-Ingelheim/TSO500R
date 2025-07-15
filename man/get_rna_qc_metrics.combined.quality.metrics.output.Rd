@@ -4,7 +4,7 @@
 \alias{get_rna_qc_metrics.combined.quality.metrics.output}
 \title{Get rna qc metrics from combined.quality.metrics.output object}
 \usage{
-\method{get_rna_qc_metrics}{combined.quality.metrics.output}(qmo_obj)
+\method{get_rna_qc_metrics}{combined.quality.metrics.output}(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}

@@ -141,7 +141,7 @@ ${tso500_data}"
   # transform bclconvert data
   bclconvert_data <- samplesheet_data$data |>
     mutate(Sample_ID = paste(.data$Sample_ID, .data$Index_ID, sep = "_")) |>
-    select(c(Sample_ID, index, index2)) |>
+    select(c(.data$Sample_ID, .data$index, .data$index2)) |>
     add_column(
       col_name1 = "",
       col_name2 = "",
@@ -153,7 +153,7 @@ ${tso500_data}"
 
   # transform tso500 data
   tso500_data <- samplesheet_data$data |>
-    select(c(Sample_ID, Index_ID, Sample_Plate, Sample_Well, Sample_Type, patient_column)) |>
+    select(c(.data$Sample_ID, .data$Index_ID, .data$Sample_Plate, .data$Sample_Well, .data$Sample_Type, .data[[patient_column]])) |>
     mutate(Sample_ID = paste(.data$Sample_ID, .data$Index_ID, sep = "_")) |>
     mutate(Pair_ID = .data$Sample_ID) |>
     add_column(Sample_Feature = "") |>

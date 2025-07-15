@@ -4,7 +4,7 @@
 \alias{get_splice_variants.combined.variant.output}
 \title{Get splice variants from combined.variant.output object}
 \usage{
-\method{get_splice_variants}{combined.variant.output}(cvo_obj)
+\method{get_splice_variants}{combined.variant.output}(cvo_obj, ...)
 }
 \arguments{
 \item{cvo_obj}{cvo_obj}

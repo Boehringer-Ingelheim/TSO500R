@@ -5,10 +5,22 @@
 #' @param tmb_file_path a file path to a TMB_trace.tsv file
 #'
 #' @return A tmb.variant.output object
-#' 
+#'
 #' @export
-tmb <- function(tmb_file_path){
+tmb <- function(tmb_file_path) {
   new_tmb_variant_output(tmb_file_path)
+}
+
+#' Extract TMB data from tmb.variant.output object
+#'
+#' @param tmb_obj A tmb.variant.output object
+#' @param ... Additional arguments (not used)
+#'
+#' @return A data frame with TMB data
+#'
+#' @export
+get_tmb_data <- function(tmb_obj, ...) {
+  UseMethod("get_tmb_data", tmb_obj)
 }
 
 #' Read in a batch of TMB_trace.tsv files into a list
@@ -34,10 +46,15 @@ read_tmb_trace_data <- function(tmb_directory) {
     full.names = TRUE
   )
 
-  tmb_data = tibble(file = tmb_files) |>
+  if (length(tmb_files) == 0) {
+    warning("No TMB trace files found in directory: ", tmb_directory)
+    return(tibble())
+  }
+
+  tmb_data <- tibble(file = tmb_files) |>
     mutate(data = lapply(.data$file, read_tsv)) |>
-    unnest(data) |>
-    mutate(sample_id = str_replace(basename(.data$file), "_TMB_Trace.tsv|.tmb.trace.tsv", "")) |>
+    unnest(.data$data) |>
+    mutate(sample_id = str_replace(basename(.data$file), "_TMB_Trace\\.tsv|.tmb.trace\\.tsv", "")) |>
     select(-file) |>
     relocate(sample_id)
 
@@ -66,11 +83,16 @@ read_tmb_details_data <- function(tmb_directory) {
     full.names = TRUE
   )
 
+  if (length(tmb_files) == 0) {
+    warning("No TMB JSON files found in directory: ", tmb_directory)
+    return(data.frame())
+  }
+
   tmb_data <- tibble(file = tmb_files) |>
     mutate(data = lapply(tmb_files, read_json)) |>
-    unnest_wider(data) |>
-    unnest_wider(Settings) |>
-    mutate(sample_id = str_replace(basename(.data$file), ".tmb.json", "")) |>
+    unnest_wider(.data$data) |>
+    unnest_wider(.data$Settings) |>
+    mutate(sample_id = str_replace(basename(.data$file), "\\.tmb\\.json", "")) |>
     select(-file) |>
     relocate(sample_id)
 
@@ -82,7 +104,7 @@ read_tmb_details_data <- function(tmb_directory) {
 #' @param tmb_directory a file path to a directory containing one of more
 #' *tmb.metrics.csv files
 #'
-#' @return A named list of data frame objects
+#' @return A data frame with TMB metrics data
 #'
 #' @export
 #'
@@ -98,13 +120,18 @@ read_tmb_details_data_csv <- function(tmb_directory) {
     full.names = TRUE
   )
 
+  if (length(tmb_files) == 0) {
+    warning("No TMB metrics CSV files found in directory: ", tmb_directory)
+    return(data.frame())
+  }
+
   tmb_data <- tibble(file = tmb_files) |>
     mutate(data = lapply(tmb_files, read.table, header = FALSE, sep = ",")) |>
-    unnest_longer(data) |>
-    unnest(data) |>
+    unnest_longer(.data$data) |>
+    unnest(.data$data) |>
     select(-c(V1, V2)) |>
     pivot_wider(names_from = V3, values_from = V4) |>
-    mutate(sample_id = str_replace(basename(.data$file), ".tmb.metrics.csv", "")) |>
+    mutate(sample_id = str_replace(basename(.data$file), "\\.tmb\\.metrics\\.csv", "")) |>
     select(-file) |>
     relocate(sample_id)
 

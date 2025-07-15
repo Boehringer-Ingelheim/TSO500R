@@ -641,7 +641,7 @@ get_sequencing_run_details_df <- function(cvo_data) {
 #'
 #' @importFrom dplyr group_by summarise select n
 #' @importFrom tibble add_column
-#' @importFrom rlang .data := 
+#' @importFrom rlang .data
 get_summarised_statistics_df <- function(data_df, column_name) {
   if (!(nrow(data_df) == 0)) {
     summarized_data_df <- data_df |>

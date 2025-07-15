@@ -4,7 +4,7 @@
 \alias{get_analysis_status.combined.quality.metrics.output}
 \title{Get analysis status from combined.quality.metrics.output object}
 \usage{
-\method{get_analysis_status}{combined.quality.metrics.output}(qmo_obj)
+\method{get_analysis_status}{combined.quality.metrics.output}(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}

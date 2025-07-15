@@ -8,12 +8,6 @@ parse_illumina_samplesheet(samplesheet)
 }
 \arguments{
 \item{samplesheet}{path to Illumina sample sheet}
-
-\item{id_column}{Column holding identifiers}
-
-\item{gene_column}{Column holding genes}
-
-\item{variant_type_column}{Column holding variant types}
 }
 \value{
 names list of data frames (header, settings, data) holding sample sheet content

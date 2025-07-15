@@ -8,12 +8,13 @@
 #' @export
 #'
 #' @importFrom ggplot2 ggplot geom_jitter aes facet_wrap theme element_line element_text element_blank
+#' @importFrom rlang .data
 plot_af_per_variant_consequence <- function(small_variant_df) {
   g <- ggplot(data = small_variant_df) +
-    geom_jitter(aes(x = sample_id, y = allele_frequency, colour = consequence_s),
+    geom_jitter(aes(x = .data$sample_id, y = .data$allele_frequency, colour = .data$consequence_s),
       size = 0.5, shape = 19, alpha = 0.7
     ) +
-    facet_wrap(~consequence_s, ncol = 5) +
+    facet_wrap(~ .data$consequence_s, ncol = 5) +
     theme(
       panel.grid.major = element_line(color = "grey", linetype = 3, size = 0.1),
       strip.background = element_blank(),
@@ -33,13 +34,14 @@ plot_af_per_variant_consequence <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom ggplot2 ggplot geom_histogram aes facet_wrap theme element_line
+#' @importFrom rlang .data
 plot_af_histogram <- function(small_variant_df) {
   g <- ggplot(small_variant_df, aes(
-    x = allele_frequency, group = sample_id,
-    colour = sample_id, fill = sample_id
+    x = .data$allele_frequency, group = .data$sample_id,
+    colour = .data$sample_id, fill = .data$sample_id
   )) +
     geom_histogram(alpha = 0.3, binwidth = 0.025) +
-    facet_wrap(~sample_id, ncol = 4) +
+    facet_wrap(~ .data$sample_id, ncol = 4) +
     theme(
       panel.grid.major = element_line(
         color = "grey",
