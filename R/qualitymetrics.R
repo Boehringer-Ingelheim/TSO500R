@@ -568,7 +568,7 @@ make_qc_table <- function(qc_df, id_col = "sample_id", group_name = "samples") {
     table_out <- table_out |>
       data_color(
         columns = metric,
-        rows = group == group_name,
+        rows = .data$group == group_name,
         fn = \(x) {
           p_value_available <- p_value_field %in% metrics
           if (p_value_available) {

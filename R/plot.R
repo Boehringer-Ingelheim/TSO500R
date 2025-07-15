@@ -61,13 +61,14 @@ plot_af_histogram <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom ggplot2 ggplot geom_density aes facet_wrap theme element_line
+#' @importFrom rlang .data
 plot_af_density <- function(small_variant_df) {
   g <- ggplot(small_variant_df, aes(
-    x = allele_frequency, group = sample_id,
-    colour = sample_id, fill = sample_id
+    x = .data$allele_frequency, group = .data$sample_id,
+    colour = .data$sample_id, fill = .data$sample_id
   )) +
     geom_density(alpha = 0.3) +
-    facet_wrap(~sample_id, ncol = 4) +
+    facet_wrap(~ .data$sample_id, ncol = 4) +
     theme(panel.grid.major = element_line(
       color = "grey",
       linetype = 3,
@@ -95,6 +96,7 @@ plot_af_density <- function(small_variant_df) {
 #' @export
 #'
 #' @importFrom ComplexHeatmap oncoPrint HeatmapAnnotation rowAnnotation anno_empty anno_oncoprint_barplot
+#' @importFrom grid unit
 plot_onco_print <- function(variant_matrix, column_title, alter_list, variant_colors, heatmap_legend, bottom_annotation = ComplexHeatmap::anno_empty(border = FALSE), top_annotation = anno_empty(border = FALSE), right_annotation = anno_empty(border = FALSE), left_annotation = anno_empty(border = FALSE), top = nrow(variant_matrix)) {
   # get top x genes
   top_index <- order(apply(variant_matrix, 1, function(x) sum(x != "")), decreasing = TRUE)[1:top]

@@ -281,7 +281,7 @@ parse_cvo_record <- function(record_string) {
     str_remove("\\t$") |>
     str_split("\\t") |>
     # replace all string NAs with NA to avoid warnings from as.numeric
-    rapply(., function(x) ifelse(x == "NA", NA, x), how = "replace")
+    rapply(function(x) ifelse(x == "NA", NA, x), how = "replace")
 
   if (str_detect(record_string, "\\[TMB\\]|\\[MSI\\]")) {
     record <- map(intermediate, ~ as.numeric(.x[2]))

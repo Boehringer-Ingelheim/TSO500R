@@ -28,7 +28,7 @@ cnv <- function(cnv_file_path, local_app = FALSE) {
 new_cnv_output <- function(cnv_file_path, local_app = FALSE) {
   cnv_data <- tibble(file = cnv_file_path) |>
     mutate(data = lapply(.data$file, parse_vcf_to_df)) |>
-    unnest(data) |>
+    unnest(.data$data) |>
     mutate(sample_id = str_replace(basename(.data$file), "_CopyNumberVariants.vcf", "")) |>
     select(-.data$file) |>
     relocate(.data$sample_id)
@@ -83,7 +83,7 @@ summarize_cnv_data <- function(cnv_directory) {
 
   cnv_data <- tibble(file = cnv_files) |>
     mutate(data = lapply(.data$file, parse_vcf_to_df)) |>
-    unnest(data) |>
+    unnest(.data$data) |>
     mutate(sample_id = str_replace(basename(.data$file), "_CopyNumberVariants\\.vcf$", "")) |>
     select(-.data$file) |>
     relocate(.data$sample_id)
