@@ -147,6 +147,7 @@ get_fusions <- function(cvo_obj, ...) {
 #' Get small variants from combined.variant.output object
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #' @return A data frame
 #' @method get_small_variants combined.variant.output
 #'
@@ -174,6 +175,7 @@ get_small_variants.combined.variant.output <- function(cvo_obj, ...) {
 #' Get gene amplifications from combined.variant.output object
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #' @return A data frame
 #' @method get_gene_amplifications combined.variant.output
 #'
@@ -207,6 +209,7 @@ get_gene_amplifications.combined.variant.output <- function(cvo_obj, ...) {
 #' Get splice variants from combined.variant.output object
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #' @return A data frame
 #' @method get_splice_variants combined.variant.output
 #'
@@ -234,6 +237,7 @@ get_splice_variants.combined.variant.output <- function(cvo_obj, ...) {
 #' Get fusions from combined.variant.output object
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #' @return A data frame
 #' @method get_fusions combined.variant.output
 #'
