@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{cvo_obj}{cvo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame
