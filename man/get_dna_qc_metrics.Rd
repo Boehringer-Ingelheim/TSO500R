@@ -9,6 +9,8 @@ get_dna_qc_metrics(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame with the dna qc metrics

@@ -128,6 +128,7 @@ get_analysis_status <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with the dna qc metrics
 #'
@@ -140,6 +141,7 @@ get_dna_qc_metrics <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with dna qc metrics (small variants/TMB)
 #'
@@ -152,6 +154,7 @@ get_dna_qc_metrics_snvtmb <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with dna qc metrics (MSI)
 #'
@@ -164,6 +167,7 @@ get_dna_qc_metrics_msi <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with dna qc metrics (CNV)
 #'
