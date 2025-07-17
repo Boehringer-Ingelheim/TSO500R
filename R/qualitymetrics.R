@@ -114,6 +114,7 @@ get_run_qc_metrics <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with the analysis status
 #'
@@ -174,6 +175,7 @@ get_dna_qc_metrics_cnv <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with extended dna qc metrics
 #'
@@ -186,6 +188,7 @@ get_dna_expanded_metrics <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with rna qc metrics
 #'
@@ -198,6 +201,7 @@ get_rna_qc_metrics <- function(qmo_obj, ...) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with expanded rna qc metrics
 #'
@@ -210,6 +214,7 @@ get_rna_expanded_metrics <- function(qmo_obj, ...) {
 #'
 #' @param qmo_obj qmo_obj
 #' @param ... Additional arguments (not used)
+#'
 #' @return A data frame
 #' @method get_run_qc_metrics combined.quality.metrics.output
 #'

@@ -100,6 +100,7 @@ read_cvo_data <- function(cvo_directory, local_app = FALSE, ctdna = FALSE) {
 #' return in data frame format
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame of small variants
 #'
@@ -112,6 +113,7 @@ get_small_variants <- function(cvo_obj, ...) {
 #' return in data frame format
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame of gene amplifications
 #'
@@ -124,6 +126,7 @@ get_gene_amplifications <- function(cvo_obj, ...) {
 #' return in data frame format
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame of splice variants
 #'
@@ -136,6 +139,7 @@ get_splice_variants <- function(cvo_obj, ...) {
 #' return in data frame format
 #'
 #' @param cvo_obj cvo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame of fusions
 #'
