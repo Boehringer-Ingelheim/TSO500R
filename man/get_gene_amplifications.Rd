@@ -9,6 +9,8 @@ get_gene_amplifications(cvo_obj, ...)
 }
 \arguments{
 \item{cvo_obj}{cvo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame of gene amplifications

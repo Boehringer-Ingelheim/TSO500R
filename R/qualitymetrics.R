@@ -102,6 +102,7 @@ read_qmo_data <- function(qmo_directory, local_app = FALSE, ctdna = FALSE) {
 #' return in data frame format
 #'
 #' @param qmo_obj qmo_obj
+#' @param ... Additional arguments (not used)
 #'
 #' @return A data frame with run qc metrics
 #'
