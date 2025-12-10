@@ -14,10 +14,13 @@ on:
 concurrency: preview-${{ github.ref }}
 
 jobs:
-  docs:
-    name: "Build Docs"
+  pkgdown:
     runs-on: ubuntu-latest
-
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -33,20 +36,13 @@ jobs:
           needs: website
 
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, examples=FALSE)
         shell: Rscript {0}
 
-      - name: Deploy preview
-        if: github.event_name == 'pull_request'
-        uses: rossjrw/pr-preview-action@v1
+      - name: Deploy to GitHub pages 🚀
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          source-dir: docs
-
-      - name: Deploy docs
-        if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: docs
+          clean: false
           branch: gh-pages
-          clean-exclude: pr-preview/
-          force: false
+          folder: docs
