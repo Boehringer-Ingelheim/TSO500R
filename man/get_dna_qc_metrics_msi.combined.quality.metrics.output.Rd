@@ -4,10 +4,12 @@
 \alias{get_dna_qc_metrics_msi.combined.quality.metrics.output}
 \title{Get dna qc metrics for msi from combined.quality.metrics.output object}
 \usage{
-\method{get_dna_qc_metrics_msi}{combined.quality.metrics.output}(qmo_obj)
+\method{get_dna_qc_metrics_msi}{combined.quality.metrics.output}(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame

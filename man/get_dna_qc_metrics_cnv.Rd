@@ -9,6 +9,8 @@ get_dna_qc_metrics_cnv(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame with dna qc metrics (CNV)

@@ -11,7 +11,7 @@ read_tmb_details_data_csv(tmb_directory)
 *tmb.metrics.csv files}
 }
 \value{
-A named list of data frame objects
+A data frame with TMB metrics data
 }
 \description{
 Read in a batch of *tmb.metrics.csv files into a list

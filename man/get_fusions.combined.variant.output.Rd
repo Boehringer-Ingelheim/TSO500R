@@ -4,10 +4,12 @@
 \alias{get_fusions.combined.variant.output}
 \title{Get fusions from combined.variant.output object}
 \usage{
-\method{get_fusions}{combined.variant.output}(cvo_obj)
+\method{get_fusions}{combined.variant.output}(cvo_obj, ...)
 }
 \arguments{
 \item{cvo_obj}{cvo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame

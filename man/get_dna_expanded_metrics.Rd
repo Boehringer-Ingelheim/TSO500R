@@ -9,6 +9,8 @@ get_dna_expanded_metrics(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame with extended dna qc metrics

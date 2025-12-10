@@ -9,6 +9,8 @@ get_analysis_status(qmo_obj, ...)
 }
 \arguments{
 \item{qmo_obj}{qmo_obj}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 A data frame with the analysis status
