@@ -1,29 +1,49 @@
-# TSO500R(eader)
+# TSO500R <img src='man/figures/tso500R_logo.png' align="right" height="138" /></a>
 
+<!-- badges: start -->
 [![R-CMD-check](https://github.com/Boehringer-Ingelheim/TSO500R/actions/workflows/test.yml/badge.svg)](https://github.com/Boehringer-Ingelheim/TSO500R/actions/workflows/test.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Boehringer-Ingelheim/TSO500R/blob/master/LICENSE)
+<!-- badges: end -->
+
+## Overview
 
 #### Handle TSO500 data using R.
 
----
-
 *TSO500R(eader)* is an R package developed for handling Illumina [TruSight Oncology 500](https://emea.illumina.com/products/by-type/clinical-research-products/trusight-oncology-500.html) data. It can be used for importing and processing of files produced by the Illumina [TSO500 DRAGEN analysis pipeline](https://support-docs.illumina.com/SW/DRAGEN_TSO500_v2.1/Content/SW/FrontPages/DRAGENTSO500_v2.1.htm), [TSO500 DRAGEN ctDNA analysis pipeline](https://support-docs.illumina.com/SW/DRAGEN_TSO500_ctDNA_v2.1/Content/SW/FrontPages/DRAGENTSO500_ctDNA_v2.1.htm) and the [LocalApp](https://emea.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/trusight/trusight-oncology-500/1000000137777_02_tso-500-local-app-v2_2_1-user-guide.pdf).
 
-The package provides different functions for parsing the various output files produced by the Illumina pipelines. This includes quality control files as well as the analysis outputs. Besides, it offers functionality to integrate the different result types, e.g. small variants and amplifications.
+TSO500R offers functionality to:
 
-Other features include functions for basic plotting and export functionality for writing `RData` objects or to generate DRAGEN analysis pipeline samplesheets.
+* Parse quality control files (`MetricsOutput.tsv`)
+* Process variant analysis outputs (`CombinedVariantOutput.tsv`)
+* Integrate different result types (small variants, amplifications, fusions)
+* Generate basic plots and visualizations
+* Export data to `RData` objects or DRAGEN samplesheets
 
 ## Installation
 
-Clone the repository:
+You can install the development version of TSO500R from GitHub:
+
+```r
+# install.packages("pak")
+pak::pak("Boehringer-Ingelheim/TSO500R")
+```
+
+Or using devtools:
+
+```r
+# install.packages("devtools")
+devtools::install_github("Boehringer-Ingelheim/TSO500R")
+```
+
+Alternatively, clone the repository and install locally:
+
 ```bash
 git clone https://github.com/Boehringer-Ingelheim/TSO500R.git
 ```
 
-Install from path using R:
 ```r
-# Install TS500R from local clone
-install.packages("/path/to/TSO500R", repos = NULL)
+# Install from local clone
+install.packages("/path/to/TSO500R", repos = NULL, type = "source")
 ```
 
 ## Usage
@@ -33,25 +53,28 @@ TSO500R provides an API for interaction with most of the output files produced b
 Once installed, you can load the TSO500R package. 
 
 ```r
-# load the tso500R(eader) package
 library(tso500R)
+
+# Load quality metrics
+qmo_data <- read_qmo_data("/path/to/TSO500/output/")
+
+# Load variant data
+cvo_data <- read_cvo_data("/path/to/TSO500/output/")
+
+# Extract small variants
+small_variants <- read_small_variants(cvo_data)
+
+# Get TMB and MSI metrics
+metrics <- get_metrics_df(cvo_data)
 ```
 
-Afterwards, you can, e.g., load all files of type `MetricsOutput` in a given directory.
-
-```r
-# load the MetricsOutput.tsv file in a specific folder
-tso500_data_dir <- "/path/to/your/TSO500/analysis/output/data/"
-qmo_data <- read_qmo_data(tso500_data_dir)
-```
-
-For detailed instructions and examples, see below in the [documentation](#documentation).
+For detailed instructions and examples, see the [documentation](#documentation) below.
 
 ## Documentation
 
-## Content
+### Table of Contents
 - [Loading MetricsOutput Data](#loading-metricsoutput-data)
-- [Loading CombinedVariantOutput Datas](#loading-combinedvariantoutput-data)
+- [Loading CombinedVariantOutput Data](#loading-combinedvariantoutput-data)
   - [Accessing Analysis Details](#accessing-analysis-details)
   - [Accessing TMB and MSI Metrics](#accessing-tmb-and-msi-metrics)
   - [Accessing Small Variants](#accessing-small-variants)
@@ -82,12 +105,12 @@ qmo_data <- read_qmo_data(tso500_data_dir, local_app=TRUE)
 In case you want to read in data that resulted from a `ctDNA analysis` run, you need to set `ctdna=TRUE` due to the (slight) differences between the file formats:
 
 ```r
-# load the MetricsOutput.tsv file of a LocalApp run in a specific folder
+# load the MetricsOutput.tsv file of a ctDNA run in a specific folder
 tso500_data_dir <- "/path/to/your/TSO500/analysis/output/data/"
 qmo_data <- read_qmo_data(tso500_data_dir, ctdna=TRUE)
 ```
 
-This will produce a list of `combined.quality.metrics.output` objects, which can be further processed and contain all the information as given in the parsed files. Each section in the `CombinedVariantOutput` file can be accessed with standard list indexing. The `combined.quality.metrics.output` object in the last can be accessed via the corresponding file name (without extension). This will therfore probably be `MetricsOutput` in case you read in a metrics file of all samples of a run and will include sample identifiers (`sample1_MetricsOutput`) if you want to read in individual metrics file.
+This will produce a list of `combined.quality.metrics.output` objects, which can be further processed and contain all the information as given in the parsed files. Each section in the `CombinedVariantOutput` file can be accessed with standard list indexing. The `combined.quality.metrics.output` object in the last can be accessed via the corresponding file name (without extension). This will therefore probably be `MetricsOutput` in case you read in a metrics file of all samples of a run and will include sample identifiers (`sample1_MetricsOutput`) if you want to read in individual metrics file.
 
 ```r
 # access the header information of a specific MetricsOutput file
@@ -113,7 +136,7 @@ read_dna_expanded_metrics(qmo_data)
 ```
 These data frames provide the metrics for one sample per row.
 
-Please refer to the [manual](https://github.com/apeltzer/TSO500R/tree/main/man) for a complete list of functions.
+Please refer to the [manual](https://github.com/Boehringer-Ingelheim/TSO500R/tree/main/man) for a complete list of functions.
 
 ### Loading CombinedVariantOutput Data
 
@@ -225,9 +248,9 @@ small_variants_with_amps <- small_variant_df |>
   add_amplification_data(read_gene_amplifications(cvo_data))
 ```
 
-### Filtering and Processing
+### Filtering and Processing Variants
 
-We also provide processing/filtering functions. If you want to do the following filtering steps, please use the function `process_small_variant_data` on your data frame with small variants.
+We also provide processing/filtering functions. If you want to do the following filtering steps, please use the function `process_and_filter_small_variant_data` on your data frame with small variants.
 
 - filters for variants that
   - have a consequence in a pre-defined list
@@ -253,7 +276,7 @@ The following variant consequences are included:
 ```r
 # filter small variant data frame as described above
 small_variants_with_filtered <- small_variant_df |>
-  process_small_variant_data()
+  process_and_filter_small_variant_data()
 ```
 
 The package also provides filtering functions for filterting out or keeping variants with specified consequences:
@@ -346,8 +369,16 @@ small_variant_df_filtered <- read_small_variants(cvo_data) |>
 df_for_oncoprint <- prepare_dataframe_for_oncoprint(small_variant_df_filtered, "sample_id", "gene", "consequence_s")
 ```
 
-## Contributions & Support 
+## Getting Help
 
-Suggestions for improvements and new features, as well as contributions are welcome. Please use the [issue tracker](https://github.com/Boehringer-Ingelheim/TSO500R/issues) to request features and for bug reports.
+If you encounter a bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/Boehringer-Ingelheim/TSO500R/issues).
 
-Also feel free to get in touch directly by contacting [@christopher-mohr](https://github.com/christopher-mohr).
+For questions and discussions, feel free to contact [@christopher-mohr](https://github.com/christopher-mohr).
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
