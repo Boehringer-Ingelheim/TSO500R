@@ -1,31 +1,54 @@
 Package: tso500R
 Type: Package
-Title: TSO500R(eader)
-Version: 0.2
+Title: Handle Illumina TruSight Oncology 500 Data
+Version: 0.2.0
 Authors@R: 
-    c(person("Christopher", "Mohr", email = "christopher.mohr@boehringer-ingelheim.de", role = c("aut", "cre")),
-      person("Alexander", "Peltzer", email = "alexander.peltzer@boehringer-ingelheim.com", role = c("ctb")),
-      person("Sophie", "Paul", email = "sophie.paul@addenbrookes.nhs.uk", role = c("aut")))
-Description: TSO500R(eader) is an R package developed for handling Illumina TruSight Oncology 500 data. It can be used for importing and processing of files produced by the Illumina TSO500 DRAGEN analysis pipeline and the LocalApp provided by Illumina.
-  The package provides different functions for parsing the various output files produced by the Illumina pipelines. This includes quality control files as well as the analysis outputs. Besides, it offers functionality to integrate the different result types, e.g. small variants and amplifications. 
-  Other features include functions for basic plotting and export functionality for writing `RData` objects or to generate DRAGEN analysis pipeline samplesheets.
+    c(person("Christopher", "Mohr", 
+             email = "christopher.mohr@boehringer-ingelheim.de", 
+             role = c("aut", "cre")),
+      person("Alexander", "Peltzer", 
+             email = "alexander.peltzer@boehringer-ingelheim.com", 
+             role = "ctb"),
+      person("Sophie", "Paul", 
+             email = "sophie.paul@addenbrookes.nhs.uk", 
+             role = "aut"))
+Description: TSO500R(eader) provides tools for importing, processing, and 
+    analyzing data from Illumina TruSight Oncology 500 (TSO500) assays. 
+    Supports data from the TSO500 DRAGEN analysis pipeline, DRAGEN ctDNA 
+    analysis pipeline, and LocalApp. Functions include parsing quality control 
+    files ('MetricsOutput.tsv'), processing variant analysis outputs 
+    ('CombinedVariantOutput.tsv'), integrating different result types, 
+    generating visualizations, and exporting data for downstream analysis.
 License: MIT + file LICENSE
+URL: https://github.com/Boehringer-Ingelheim/TSO500R,
+    https://boehringer-ingelheim.github.io/TSO500R/
+BugReports: https://github.com/Boehringer-Ingelheim/TSO500R/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.0.0)
 Imports:
-  ComplexHeatmap,
-  dplyr,
-  ggplot2,
-  gt,
-  janitor,
-  jsonlite,
-  openxlsx,
-  purrr,
-  readr,
-  readxl,
-  rlang,
-  stringr,
-  tibble,
-  tidyr,
-  vcfR
+    ComplexHeatmap,
+    dplyr (>= 1.0.0),
+    ggplot2 (>= 3.3.0),
+    gt,
+    janitor,
+    jsonlite,
+    openxlsx,
+    purrr (>= 0.3.0),
+    readr,
+    readxl,
+    rlang,
+    stringr,
+    tibble,
+    tidyr (>= 1.1.0),
+    vcfR
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    covr
+VignetteBuilder: knitr
+Config/testthat/edition: 3

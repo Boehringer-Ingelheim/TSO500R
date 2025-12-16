@@ -15,3 +15,4 @@ char vector
 \description{
 Helper function to parse key-value lines in CombinedVariantOutput.tsv
 }
+\keyword{internal}

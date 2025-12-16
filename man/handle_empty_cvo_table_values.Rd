@@ -17,3 +17,4 @@ data.frame
 Helper function to handle empty rows
 in CombinedVariantOutput.tsv tabular data
 }
+\keyword{internal}

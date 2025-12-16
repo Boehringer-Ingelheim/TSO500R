@@ -1,0 +1,136 @@
+url: https://boehringer-ingelheim.github.io/TSO500R/
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+  includes:
+    in_header: |
+      <link rel="stylesheet" href="extra.css">
+
+home:
+  title: TSO500R • Handle TSO500 Data Using R
+  description: >
+    A modern R package for analyzing Illumina TruSight Oncology 500 data
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github, lightswitch]
+  components:
+    intro:
+      icon: fa-home
+      href: index.html
+      aria-label: Home
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: Getting Started
+      href: articles/getting-started.html
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/Boehringer-Ingelheim/TSO500R
+      aria-label: GitHub
+
+reference:
+  - title: "Main Functions"
+    desc: "Primary user-facing functions for creating data objects"
+    contents:
+      - cvo
+      - cnv
+      - qualitymetrics
+      - tmb
+
+  - title: "Reading Data Files"
+    desc: "Import TSO500 data files"
+    contents:
+      - read_qmo_data
+      - read_cvo_data
+      - read_small_variants
+      - read_gene_amplifications
+      - read_fusions
+      - read_splice_variants
+      - read_tmb_trace_data
+      - read_tmb_details_data
+      - read_tmb_details_data_csv
+      - read_cnv_data
+      - read_annotation_data
+      - read_analysis_status
+      - read_run_qc_metrics
+
+  - title: "Quality Metrics"
+    desc: "Extract and access QC metrics"
+    contents:
+      - starts_with("get_")
+      - starts_with("read_dna")
+      - starts_with("read_rna")
+      - extract_metrics
+
+  - title: "Filtering and Processing"
+    desc: "Filter and process variant data"
+    contents:
+      - process_and_filter_small_variant_data
+      - starts_with("filter_")
+      - starts_with("keep_")
+
+  - title: "Data Integration"
+    desc: "Combine and enrich data"
+    contents:
+      - add_tmb_variant_data
+      - add_amplification_data
+      - add_annotation_data
+      - get_metrics_df
+      - get_count_df
+      - get_analysis_details_df
+      - get_sequencing_run_details_df
+      - summarize_cnv_data
+      - update_annotation_join_columns
+
+  - title: "Visualization"
+    desc: "Create plots and tables"
+    contents:
+      - starts_with("plot_")
+      - prepare_dataframe_for_oncoprint
+      - make_qc_table
+      - add_common_theme_elements
+
+  - title: "Export and Writing"
+    desc: "Export data and generate files"
+    contents:
+      - generate_dragen_samplesheet
+      - write_workbook
+      - write_worksheet
+      - starts_with("write_")
+
+  - title: "Validation"
+    desc: "Validate TSO500 data"
+    contents:
+      - validate_tso500
+      - validate_tso500_qc
+
+  - title: "Parsing Functions"
+    desc: "Parse file formats and data structures"
+    contents:
+      - parse_illumina_samplesheet
+      - parse_p_dot_notation
+      - parse_vcf_to_df
+      - parse_qmo_record
+      - parse_qmo_table
+      - parse_cvo_record
+      - parse_cvo_table
+      - handle_empty_qmo_table_values
+      - handle_empty_cvo_table_values
+      - trim_qmo_header_and_footer
+      - trim_cvo_header_and_footer
+
+  - title: "Constructors"
+    desc: "Internal constructor functions for data objects"
+    contents:
+      - new_combined_quality_metrics_output
+      - new_combined_variant_output
+      - new_tmb_variant_output
+      - new_cnv_output

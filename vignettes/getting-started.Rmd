@@ -1,0 +1,68 @@
+---
+title: "Getting Started with tso500R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with tso500R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Introduction
+
+Welcome to tso500R! This guide will help you get started with analyzing TSO500 data.
+
+## Installation
+
+```{r}
+pak::pak("Boehringer-Ingelheim/TSO500R")
+```
+
+## Basic Workflow
+
+### 1. Load Data
+
+```{r}
+library(tso500R)
+
+# Quality metrics
+qc_data <- read_qmo_data("/path/to/output/")
+
+# Variant data
+variant_data <- read_cvo_data("/path/to/output/")
+```
+
+### 2. Extract Variants
+
+```{r}
+small_variants <- read_small_variants(variant_data)
+fusions <- read_fusions(variant_data)
+cnvs <- read_gene_amplifications(variant_data)
+```
+
+### 3. Filter and Process
+
+```{r}
+filtered_variants <- small_variants |>
+  process_and_filter_small_variant_data()
+```
+
+### 4. Visualize
+
+```{r}
+plot_af_per_variant_consequence(filtered_variants)
+plot_af_histogram_per_sample(filtered_variants)
+```
+
+## Next Steps
+
+- Check out the [function reference](../reference/index.html)
+- Read the [changelog](../news/index.html)
+- Report issues on [GitHub](https://github.com/Boehringer-Ingelheim/TSO500R/issues)

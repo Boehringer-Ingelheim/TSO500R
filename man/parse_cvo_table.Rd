@@ -15,3 +15,4 @@ data.frame
 \description{
 Helper function to parse tabular data in CombinedVariantOutput.tsv
 }
+\keyword{internal}

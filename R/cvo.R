@@ -278,6 +278,8 @@ get_fusions.combined.variant.output <- function(cvo_obj, ...) {
 #'
 #' @return char vector
 #'
+#' @keywords internal
+#'
 #' @importFrom stringr str_split str_remove str_detect
 #' @importFrom purrr map map_chr
 #' @importFrom janitor make_clean_names
@@ -308,6 +310,8 @@ parse_cvo_record <- function(record_string) {
 #'
 #' @return data.frame
 #'
+#' @keywords internal
+#'
 #' @importFrom stringr str_extract str_detect str_replace_all
 parse_cvo_table <- function(table_string) {
   intermediate <- table_string |> trim_cvo_header_and_footer()
@@ -331,6 +335,8 @@ parse_cvo_table <- function(table_string) {
 #' @param intermediate_tbl intermediate table string
 #'
 #' @return data.frame
+#'
+#' @keywords internal
 #'
 #' @importFrom stringr str_detect str_replace str_length
 #' @importFrom utils read.table
@@ -356,6 +362,8 @@ handle_empty_cvo_table_values <- function(intermediate_tbl) {
 #' @param string string with file content
 #'
 #' @return char vector
+#'
+#' @keywords internal
 #'
 #' @importFrom stringr str_remove
 trim_cvo_header_and_footer <- function(string) {

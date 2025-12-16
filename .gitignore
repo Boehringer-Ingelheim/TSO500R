@@ -2,3 +2,16 @@
 .Rhistory
 .RData
 .Ruserdata
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# pkgdown site
+docs/
+pkgdown/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
