@@ -17,29 +17,29 @@ Processes small-variant data to comply with requirements for
 further analysis. The function:
 
 \enumerate{
-  \item filters for variants that:
-    \itemize{
-      \item have a consequence in a pre-defined list (see details)
-      \item are present with depth > 0
-    }
-  \item extracts NP ID and protein information from the P Dot-notation column
-  \item adds columns to faciliate addition of annotation data
+\item filters for variants that:
+\itemize{
+\item have a consequence in a pre-defined list (see details)
+\item are present with depth > 0
+}
+\item extracts NP ID and protein information from the P Dot-notation column
+\item adds columns to faciliate addition of annotation data
 }
 }
 \details{
 The following variant consequences are currently included:
 \itemize{
- \item frameshift_variant
- \item inframe_deletion
- \item inframe_insertion
- \item missense_variant
- \item missense_variant:splice_region_variant
- \item splice_acceptor_variant
- \item splice_donor_variant
- \item splice_donor_variant:intron_variant
- \item start_lost
- \item stop_gained
- \item stop_gained:splice_region_variant
- \item stop_lost
+\item frameshift_variant
+\item inframe_deletion
+\item inframe_insertion
+\item missense_variant
+\item missense_variant:splice_region_variant
+\item splice_acceptor_variant
+\item splice_donor_variant
+\item splice_donor_variant:intron_variant
+\item start_lost
+\item stop_gained
+\item stop_gained:splice_region_variant
+\item stop_lost
 }
 }

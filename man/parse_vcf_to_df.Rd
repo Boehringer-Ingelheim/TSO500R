@@ -7,7 +7,7 @@
 parse_vcf_to_df(path)
 }
 \arguments{
-\item{path}{path to VCF file in `*.vcf` or `*.vcf.gz` format}
+\item{path}{path to VCF file in \verb{*.vcf} or \verb{*.vcf.gz} format}
 }
 \value{
 {tibble} new data frame with all variants (fixed field and genotype information)

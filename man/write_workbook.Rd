@@ -18,7 +18,7 @@ the Excel workbook
 }
 \description{
 Store data frames to Microsoft Excel workbook. Submission of
-  more than one data frame will result in a workbook with that many sheets.
-  The number of worksheet names _must_ match the number of data frames
-  submitted.
+more than one data frame will result in a workbook with that many sheets.
+The number of worksheet names \emph{must} match the number of data frames
+submitted.
 }

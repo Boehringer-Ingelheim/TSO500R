@@ -15,3 +15,4 @@ char vector
 \description{
 Helper function to remove header and footer from CombinedVariantOutput.tsv
 }
+\keyword{internal}

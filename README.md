@@ -5,9 +5,9 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Boehringer-Ingelheim/TSO500R/blob/master/LICENSE)
 <!-- badges: end -->
 
-## Overview
+> **TSO500R(eader)** - Handle TSO500 data using R
 
-#### Handle TSO500 data using R.
+## Overview
 
 *TSO500R(eader)* is an R package developed for handling Illumina [TruSight Oncology 500](https://emea.illumina.com/products/by-type/clinical-research-products/trusight-oncology-500.html) data. It can be used for importing and processing of files produced by the Illumina [TSO500 DRAGEN analysis pipeline](https://support-docs.illumina.com/SW/DRAGEN_TSO500_v2.1/Content/SW/FrontPages/DRAGENTSO500_v2.1.htm), [TSO500 DRAGEN ctDNA analysis pipeline](https://support-docs.illumina.com/SW/DRAGEN_TSO500_ctDNA_v2.1/Content/SW/FrontPages/DRAGENTSO500_ctDNA_v2.1.htm) and the [LocalApp](https://emea.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/trusight/trusight-oncology-500/1000000137777_02_tso-500-local-app-v2_2_1-user-guide.pdf).
 

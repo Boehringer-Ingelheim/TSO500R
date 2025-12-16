@@ -1,10 +1,10 @@
 name: "Build docs using pkgdown"
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
   release:
-    types: [published]
+    types: [ published ]
   workflow_dispatch:
 
 permissions:
@@ -13,8 +13,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pkgdown-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -22,9 +22,23 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4      
+        with:
+          fetch-depth: 0
 
       - uses: r-lib/actions/setup-pandoc@v2
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libxml2-dev \
+            libgit2-dev \
+            libssl-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -36,10 +50,11 @@ jobs:
           needs: website
 
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, examples = FALSE)
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
@@ -47,7 +62,12 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    
+    if: github.event_name != 'pull_request'
+
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+
     permissions:
       pages: write
       id-token: write
